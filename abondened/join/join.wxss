@@ -1,0 +1,51 @@
+.page {
+  margin-top:30%;
+  padding: 20rpx 0;
+  margin: 60rpx
+} 
+.title{
+    margin-bottom: 0.3em;
+    margin-top: 1em;
+    text-align: center;
+}
+.inputView{
+    margin:40rpx 20rpx 0rpx 20rpx;
+    border: 2rpx solid gainsboro;
+    border-radius: 30rpx;
+    height: 80rpx;
+    font-size: 0.875em;
+    text-align: center;
+}
+/**
+input{
+    margin-left: 25rpx;
+    margin-right: 25rpx;
+    margin-bottom: 25rpx;
+    height: 60rpx;
+}
+button{
+    padding-left: 50px; 
+    padding-right: 50px;
+    border-radius: 40rpx;
+    margin-bottom: 25rpx;
+    height: 60rpx;
+}
+
+button{
+    margin: 40rpx 20rpx 0 20rpx;
+    border-radius: 40rpx;
+}
+**/
+
+.picker{
+    margin-top: 20rpx;
+    padding: 8px;
+    background-color: gainsboro;
+    border-radius: 30rpx;
+}
+
+.ph{
+    color: orange;
+    font-size: 0.875em;
+    text-align: center;
+}

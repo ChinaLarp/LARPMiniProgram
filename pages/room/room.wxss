@@ -1,0 +1,106 @@
+page, .page {
+  height: 100%;
+}
+
+.cover {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  background: rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+
+.article {
+  padding: 10rpx;
+  font-size: 32rpx;
+}
+
+.tx {
+  font-weight: bold;
+}
+
+.pdt {
+  padding-top: 10rpx;
+}
+
+.swiper-tab {
+  padding-top: 28rpx;
+  display: flex;
+  flex-direction: row;
+  line-height: 80rpx;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+}
+
+.tab-item {
+  width: 100%;
+  text-align: center;
+}
+
+.swiper {
+  height: 100%;
+}
+
+.a {
+  width: 100%;
+  position: fixed;
+  bottom: -5rpx;
+}
+
+.swiperit {
+  width: 100%;
+  background-repeat: round;
+  background-image: url(http://larpxiaozhushou.tk/pic/background);
+}
+
+.swipscroll {
+  height: 85%;
+  width: 93%;
+}
+
+.on {
+  filter: grayscale(90%);
+  color: blue;
+  border-bottom: 4rpx solid orange;
+}
+
+.notepad {
+  margin-bottom: 30rpx;
+  border: 2rpx solid grey;
+  width: 100%;
+  height: 180rpx;
+}
+
+.square {
+  width: 100%;
+  margin: 20rpx auto 0;
+}
+
+.myclueb {
+  width: 28%;
+  height: 65rpx;
+  padding-top: 20rpx;
+}
+
+.squareB {
+  width: 100%;
+  margin: 20rpx auto 0;
+  height: 65rpx;
+  font-size: 28rpx;
+}
+
+.flex {
+  margin-left: 35rpx;
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
