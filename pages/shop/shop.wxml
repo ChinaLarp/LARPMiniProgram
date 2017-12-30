@@ -53,7 +53,7 @@
   <block wx:for="{{gamelist}}" wx:key="index">
     <view class="form">
       <view class="game">
-        <image class="pic" src="https://chinabackend.bestlarp.com/pic/"+"{{item.id}}" style="width: 110rpx; height: 110rpx;"></image>
+        <image class="pic" src="https://chinabackend.bestlarp.com/pic/{{item.iconurl}}" style="width: 110rpx; height: 110rpx;"></image>
         <view class="info">
           <view class="h1">
             {{item.name}}
