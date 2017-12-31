@@ -6,7 +6,6 @@
 }
 
 .page {
-  height: 420rpx;
   flex: 1;
   font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
   overflow: hidden;

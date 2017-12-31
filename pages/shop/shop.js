@@ -1,4 +1,5 @@
 var larp = require('../../utils/util.js')
+var md5 = require('../../utils/md5.js')
 const app = getApp()
 Page({
   data: {
@@ -83,41 +84,42 @@ Page({
     });
     
   },
+  waitglobal:function() {
+    let that=this
+    if(app.globalData.unionid==undefined) {
+      console.log("waiting")
+      setTimeout(function () { that.waitglobal() }, 500);
+    } else {
+      //console.log(app.globalData.unionid)
+      wx.request({
+        url: larp.backendurl + '?type=table&hostid=' + app.globalData.unionid,
+        success: function (res) {
+          console.log(res.data)
+          if (res.data.length != 0) {
+            wx.navigateTo({
+              url: '../create/create?tableid=' + res.data[0].tableid
+            })
+          } else {
+            wx.request({
+              url: larp.backendurl + '?type=game&select=id&select=name&select=category&select=descripion&select=iconurl',
+              success: function (res) {
+                that.setData({
+                  gamelist: res.data
+                })
+                wx.hideLoading()
+              },
+            });
+          }
+        }
+      })
+
+    }
+  },
   onShow: function (e) {
     let that = this
     wx.showLoading({
       title: '获取游戏列表',
     })
-    function waitglobal() {
-      if (app.globalData.unionid==undefined) {
-        console.log("waiting")
-        setTimeout(function () { waitglobal() }, 1000);
-      } else {
-        //console.log(app.globalData.unionid)
-        wx.request({
-          url: larp.backendurl + '?type=table&hostid=' + app.globalData.unionid,
-          success: function (res) {
-            console.log(res.data)
-            if (res.data.length != 0) {
-              wx.navigateTo({
-                url: '../create/create?tableid=' + res.data[0].tableid
-              })
-            } else {
-              wx.request({
-                url: larp.backendurl + '?type=game',
-                success: function (res) {
-                  that.setData({
-                    gamelist: res.data
-                  })
-                  wx.hideLoading()
-                },
-              });
-            }
-          }
-        })
-        
-      }
-    }
-    waitglobal()
+    this.waitglobal()
   }
 })

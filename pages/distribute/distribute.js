@@ -1,5 +1,6 @@
 const app = getApp()
 var larp = require('../../utils/util.js')
+var md5 = require('../../utils/md5.js')
 Page({
   /**
    * 页面的初始数据
@@ -33,8 +34,10 @@ Page({
                     gameid: that.data.gameid,
                     characterid: that.data.characterid,
                     usernickname: app.globalData.unionid,
+                    broadcast: "大家好",
                     actionpoint: 0,
-                    vote: -1
+                    vote: -1,
+                    signature: md5.hexMD5("xiaomaomi")
                   },
                   method: "POST",
                   success: function (res) {

@@ -23,50 +23,36 @@
           </view>
           <view class="pdt">{{characterinfo.characterdescription}}</view>
           <view>{{characterinfo.characterbackground}}</view>
-          <view class="tx pdt">已知信息：</view>
           <view wx:for="{{characterinfo.characterinfo}}">
             <view class="tx pdt">*{{item.type}}</view>
             <view wx:for="{{item.content}}">{{item}}</view>
           </view>
-
-          <view class="tx pdt">目的：</view>
-          <view wx:for="{{characterinfo.characterobjective}}">
-            {{item}}
-          </view>
-
         </block>
       </scroll-view>
     </swiper-item>
 
     <swiper-item class="swiperit">
       <scroll-view class="weui-article swipscroll" scroll-y="true">
-        <view class="weui-article__h1 tx">公开的信息：</view>
+        <view class="weui-article__h1 tx">剧本信息：</view>
         <block>
-          <block wx:for="{{mainplot}}" wx:for-item="plot" wx:key="index">
-            <block wx:for="{{plot.content}}" wx:for-item="item" wx:key="index">
-              <block wx:if="{{plot.plotid<=roundnumber}}" wx:for-item="item" wx:key="index">
-                <view class="tx pdt">*{{item.type}}</view>
-                <block wx:for="{{item.content}}" wx:for-item="paragraph" wx:key="index">
+          <block wx:for="{{gameinfo.mainplot}}" wx:for-item="plot" wx:key="plotindex">
+            <block wx:if="{{plot.plotid<=roundnumber}}">
+                <view class="weui-article__h1 tx">{{plot.plotname}}</view>
+                <view class="tx pdt">*公开信息</view>
+                <block wx:for="{{plot.content}}" wx:for-item="paragraph" wx:key="pindex">
                   <view>{{paragraph}}</view>
                 </block>
-              </block>
-            </block>
-          </block>
-        </block>
-        <block wx:if="{{characterinfo.characterplot!=[]}}">
-            <view class="tx pdt">回合剧本：</view>
-            <block wx:for="{{characterinfo.characterplot}}" wx:for-item="plot" wx:key="index">
-              <view  wx:if="{{plot.plotid<=roundnumber}}" class="tx pdt">{{plot.plotname}}</view>
-              <block wx:for="{{plot.content}}" wx:for-item="item" wx:key="index">
-                <block wx:if="{{plot.plotid<=roundnumber}}" wx:for-item="item" wx:key="index">
-                  <view class="tx pdt">*{{item.type}}</view>
-                  <block wx:for="{{item.content}}" wx:for-item="paragraph" wx:key="index">
-                    <view>{{paragraph}}</view>
+                <view class="tx pdt">*个人信息</view>
+                <block wx:for="{{characterinfo.characterplot[plotindex].content}}" wx:for-item="charactercontent" wx:key="cindex">
+                  <viewclass="tx pdt">{{charactercontent.type}}</view>
+                  <block wx:for="{{charactercontent.content}}" wx:for-item="characterpara" wx:key="cpindex">
+                    <view>{{characterpara}}</view>
                   </block>
                 </block>
               </block>
             </block>
           </block>
+        </block>
       </scroll-view>
     </swiper-item>
 
@@ -92,7 +78,7 @@
             </swiper-item>
           </block>
         </swiper>
-        <view wx:if="{{acquiredclue.length>0}}" style="padding-top: 20rpx; display: flex; flex-direction: row; justify-content: space-around; align-items: center; width: 100%;">
+        <view wx:if="{{acquiredclue.length>0}}" hidden="{{acquiredclue[currentclue].cluenumber==-1}}" style="padding-top: 20rpx; display: flex; flex-direction: row; justify-content: space-around; align-items: center; width: 100%;">
           <picker style="width: 50%" bindchange="picksend" range="{{gameinfo.characterlist}}" range-key="name">
             <view style="height: 45rpx; background-color: gainsboro; border-radius: 10rpx;">
               传递给：{{gameinfo.characterlist[picksend].name}}
@@ -135,7 +121,7 @@
           <view class="weui-article__h1 tx">使用功能</view>
           <block>
             <view class="square">
-              <form bindsubmit="bindFormSubmit">
+              <form bindsubmit="broadcastSubmit">
                 <input class="notepad" maxlength="100" bindblur="bindTextAreaBlur" style="height: 40rpx;" placeholder="“公告秘密”将此填写内容广播（所有玩家可见）" value="{{broadcast}}" name="textarea" />
                 <button class="squareB" style="width: 100%;" form-type="submit"> 公告秘密 </button>
               </form>

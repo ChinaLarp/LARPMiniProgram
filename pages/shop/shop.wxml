@@ -7,13 +7,14 @@
       <swiper indicator-dots="true" autoplay="true" interval="3000" duration="500">
         <block wx:for-items="{{background}}" wx:key="index">
           <swiper-item>
-            <image class="swiper-item" src="https://chinabackend.bestlarp.com/pic/top{{item}}" style="width: 100%"></image>
+            <image class="swiper-item" src="https://chinabackend.bestlarp.com/pic/top{{item}}.png" style="width: 100%"></image>
           </swiper-item>
         </block>
       </swiper>
     </view>
   </view>
 
+    <!--
   <view class="flex">
     <view class="tab-item">
       <image class="tab-item" bindtap="navigate" id="1" style="width: 50rpx; height: 50rpx;" src="/icon/taiji_shop.png"></image>
@@ -30,8 +31,9 @@
     <view class="tab-item">
       <image class="tab-item" bindtap="navigate" id="5" style="width: 50rpx; height: 50rpx;" src="/icon/detect_shop.png"></image>
     </view>
+
   </view>
-  <view class="flex1">
+    <view class="flex1">
     <view class="tab-item">
       武侠故事
     </view>
@@ -48,6 +50,7 @@
       经典游戏
     </view>
   </view>
+-->
 </view>
 <scroll-view class="page" scroll-y="true">
   <block wx:for="{{gamelist}}" wx:key="index">
@@ -73,26 +76,6 @@
   </block>
 
 
-  <!--
-  <view class="form">
-    <view class="game">
-      <view class="pic bc_yellow" style="width: 55px; height: 55px;"></view>
-      <view class="info">
-        <view class="h1">
-          鸿门宴之上海滩
-        </view>
-        <view class="h2">
-          民国风云
-        </view>
-        <view class="h3">
-          Yummy酱又一力作
-        </view>
-      </view>
-    </view>
-    <view class="Dbtn">
-      <button class="detail" size="mini">详细介绍</button>
-    </view>
-  </view>
--->
+
 
 </scroll-view>

@@ -59,7 +59,7 @@ page, .page {
 .swiperit {
   width: 100%;
   background-repeat: round;
-  background-image: url(https://chinabackend.bestlarp.com/pic/background);
+  background-image: url(https://chinabackend.bestlarp.com/pic/background.png);
 }
 
 .swipscroll {
@@ -99,7 +99,6 @@ page, .page {
 }
 
 .flex {
-  margin-left: 35rpx;
   display: flex;
   flex-direction: row;
   width: 90%;

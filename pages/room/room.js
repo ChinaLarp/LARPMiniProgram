@@ -2,19 +2,19 @@
 //获取应用实例
 const app = getApp()
 var larp = require('../../utils/util.js')
+var md5 = require('../../utils/md5.js');
 Page({
   data: {
     updatetab: [false, false, false, false, false, false],
-    tutorial: ["https://chinabackend.bestlarp.com/pic/tutorial0",      "https://chinabackend.bestlarp.com/pic/tutorial1", "https://chinabackend.bestlarp.com/pic/tutorial2", "https://chinabackend.bestlarp.com/pic/tutorial3", "https://chinabackend.bestlarp.com/pic/tutorial4", "https://chinabackend.bestlarp.com/pic/tutorial5"],
+    tutorial: ["https://chinabackend.bestlarp.com/pic/tutorial0.png",
+      "https://chinabackend.bestlarp.com/pic/tutorial1.png", "https://chinabackend.bestlarp.com/pic/tutorial2.png", "https://chinabackend.bestlarp.com/pic/tutorial3.png", "https://chinabackend.bestlarp.com/pic/tutorial4.png", "https://chinabackend.bestlarp.com/pic/tutorial5.png"],
     currenttutorial: -1,
     animationData: {},
     user_id: '',
     tableid: '',
     gameid: '',
     characterid: '',
-    characterplot: [],
     characterinfo: {},
-    mainplot: [],
     gameinfo: {},
     display: '0',
     acquiredclue: [],
@@ -45,75 +45,87 @@ Page({
   },
   refresh: function (e) {
     let that = this
-    wx.showLoading({
-      title: '刷新信息',
-    })
-    console.log("refresh")
-    wx.request({
-      url: larp.backendurl + '/' + that.data.table_id,
-      success: function (res) {
-        //console.log(res.satusCode)
-        if (res.statusCode == 404 && that.data.table_id) {
-          wx.showModal({
-            title: '房间不存在',
-            content: '房间不存在, 请从转发链接重新进入',
-            showCancel: false,
-            complete: function (res) {
-              wx.request({
-                url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
-                success: function (res) {
-                  console.log(res.data)
-                  for (user in res.data) {
-                    wx.request({
-                      url: larp.backendurl + '/' + res.data[user]._id,
-                      method: 'DELETE',
-                      success: function () {
-                        console.log("deleted")
-                      },
-                    })
-                  }
-                },
-              })
-              larp.cleardata()
-            }
-          })
-
-        } else {
-          that.setData({
-            roundnumber: res.data.roundnumber,
-            hostname: res.data.hostid,
-            cluestatus: res.data.cluestatus
-          })
+    if (that.data.table_id) {
+      wx.showLoading({
+        title: '获取房间信息',
+      })
+      wx.request({
+        url: larp.backendurl + '/' + that.data.table_id,
+        success: function (res) {
+          wx.hideLoading()
+          if (res.statusCode == 404) {
+            wx.showModal({
+              title: '房间不存在',
+              content: '房间不存在, 请从转发链接重新进入',
+              showCancel: false,
+              complete: function (res) {
+                if (that.data.user_id) {
+                  wx.request({
+                    url: larp.backendurl + '/' + that.data.user_id,
+                    method: 'DELETE',
+                    data: {
+                      signature: md5.hexMD5(that.data.user_id+"xiaomaomi")
+                    },
+                    success: function () {
+                      console.log("deleted")
+                    },
+                  })
+                }
+              }
+            })
+            larp.cleardata()
+          } else {
+            that.setData({
+              roundnumber: res.data.roundnumber,
+              hostname: res.data.hostid,
+              cluestatus: res.data.cluestatus
+            })
+          }
         }
-      }
-    });
-    wx.request({
-      url: larp.backendurl + '/' + that.data.user_id,
-      success: function (res) {
-        that.setData({
-          acquiredclue: res.data.acquiredclue,
-          broadcast: res.data.broadcast,
-          vote: res.data.vote,
-          actionpoint: res.data.actionpoint
-        })
-        wx.hideLoading()
-      },
-    });
+      })
+    }
+    if (that.data.user_id) {
+      wx.showLoading({
+        title: '获取玩家信息',
+      })
+      wx.request({
+        url: larp.backendurl + '/' + that.data.user_id,
+        success: function (res) {
+          that.setData({
+            acquiredclue: res.data.acquiredclue,
+            broadcast: res.data.broadcast,
+            vote: res.data.vote,
+            actionpoint: res.data.actionpoint
+          })
+          wx.hideLoading()
+        },
+      });
+    }
+    if (!(that.data.user_id && that.data.table_id )) {
+      larp.cleardata()
+      wx.showModal({
+        title: '数据过期',
+        content: '数据过期, 请从转发链接重新进入',
+        showCancel: false,
+        complete: function (res) {
+        }
+      })
+    }
   },
   //swiper
   nexttutorial: function (e) {
-    console.log(e);
+    //console.log(e);
     var newtab = this.data.updatetab
     newtab[e.detail.current] = false
     this.setData({
       currenttutorial: this.data.currenttutorial + 1,
       currentTab: (parseInt(e.target.id)+1)%6,
-        updatetab: newtab
+      updatetab: newtab
     })
-    console.log(this.data.currentTab)
+    //console.log(this.data.currentTab)
   },
   swiperH: function (e) {
-    console.log(e);
+    //console.log(e);
     var newtab=this.data.updatetab
     newtab[e.detail.current]=false
     this.setData({
@@ -122,7 +134,7 @@ Page({
     })
   },
   swiperV: function (e) {
-    console.log(e.detail.current);
+    //console.log(e.detail.current);
     this.setData({
       currentclue: e.detail.current,
     })
@@ -206,20 +218,6 @@ Page({
       }
     }
   },
-
-  closepic: function (e){
-    this.setData({
-      seeimage: -1
-    })
-  },
-
-  hide: function (e) {
-    this.setData({
-      seeimage: -1
-    })
-  },
-
-
   //sendClueTo
   sendclueto: function () {
     let that = this
@@ -227,8 +225,6 @@ Page({
     var tempuser_id
     if (this.data.characterid==this.data.picksend){
       wx.showToast({ title: '不能发给自己', icon: 'loading', duration: 1000 });
-    } else if (that.data.acquiredclue[that.data.currentclue].cluenumber==-1 ){
-      wx.showToast({ title: '线索已被发送', icon: 'loading', duration: 1000 });
     }else{
     //animation
     var animation = wx.createAnimation({
@@ -242,7 +238,6 @@ Page({
     this.setData({
       animationData: this.animation.export()
     });
-    
     setTimeout(function () {
       wx.request({
         url: larp.backendurl + '?type=user&tableid=' + that.data.tableid + '&characterid=' + that.data.picksend,
@@ -250,25 +245,19 @@ Page({
           console.log(res.data[0])
           tempacquiredclue = res.data[0].acquiredclue
           tempuser_id = res.data[0]._id
-        },
-        complete: function () {
-          console.log(tempacquiredclue)
-          console.log(tempuser_id)
           wx.request({
             url: larp.backendurl + '/' + tempuser_id,
             data: {
-              acquiredclue: tempacquiredclue.concat(that.data.acquiredclue[that.data.currentclue])
+              acquiredclue: tempacquiredclue.concat(that.data.acquiredclue[that.data.currentclue]),
+              signature: md5.hexMD5(tempuser_id+"xiaomaomi")
             },
             method: 'PUT',
             success: function (res) {
               console.log('send complete')
-            },
-            complete: function () {
               var newacquiredclue = that.data.acquiredclue
               newacquiredclue[that.data.currentclue] = { "content": that.data.acquiredclue[that.data.currentclue].content +"(该线索已发送给" + that.data.gameinfo.characterlist[that.data.picksend].name + ")。", "cluenumber": -1, "cluelocation": that.data.acquiredclue[that.data.currentclue].cluelocation }
               that.setData({
-                acquiredclue: newacquiredclue,
-                currentclue: that.data.currentclue - 1
+                acquiredclue: newacquiredclue
               })
               wx.sendSocketMessage({
                 data: JSON.stringify({
@@ -281,11 +270,12 @@ Page({
                   acquiredclue: that.data.acquiredclue,
                   broadcast: that.data.broadcast,
                   vote: that.data.vote,
-                  actionpoint: that.data.actionpoint
+                  actionpoint: that.data.actionpoint,
+                  signature: md5.hexMD5(that.data.user_id + "xiaomaomi")
                 },
                 method: "PUT",
                 success: function (res) {
-                  console.log("succeeded")
+                  console.log("sync succeeded")
                 },
               });
             }
@@ -312,14 +302,11 @@ Page({
   },
 
   enlarge: function (e) {
-    var hidden=e.target.id
+    var image=e.target.id
     this.setData({
-      seeimage: hidden
+      seeimage: image
     })
   },
-
-
-
   //navigator
   navigate: function (e) {
     console.log(e);
@@ -341,42 +328,38 @@ Page({
     wx.request({
       url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
       success: function (res) {
-        console.log(res.data.length)
-        console.log(that.data.gameinfo.playernumber)
-        if (res.data.length != that.data.gameinfo.playernumber){
-          wx.showToast({ title: '人数未齐', icon: 'loading', duration: 1000 });
-        }else{}
         try{
           var plotname = '确认进入下一回合：“' + that.data.gameinfo.mainplot[that.data.roundnumber + 1].plotname + '” 吗?'
         }catch(e){
-          console.log(e)
+          //console.log(e)
           var plotname = "已经是最后一回合，请点击退出房间"
         }
-          wx.showModal({
-            title: '进入下回合',
-            content:plotname,
-            success: function (res) {
-              if (res.confirm) {
-                wx.request({
-                  url: larp.backendurl + '/' + that.data.table_id,
-                  data: {
-                    roundnumber: that.data.roundnumber + 1
-                  },
-                  method: "PUT",
-                  success: function (res) {
-                    larp.socketsend(that, 'refresh')
-                  },
-                })
-              } else if (res.cancel) {
-              }
+        if (res.data.length != that.data.gameinfo.playernumber) {
+          plotname = "人数未齐！"+plotname
+        }
+        wx.showModal({
+          title: '进入下回合',
+          content:plotname,
+          success: function (res) {
+            if (res.confirm) {
+              wx.request({
+                url: larp.backendurl + '/' + that.data.table_id,
+                data: {
+                  roundnumber: that.data.roundnumber + 1,
+                  signature: md5.hexMD5(that.data.table_id+"xiaomaomi")
+                },
+                method: "PUT",
+                success: function (res) {
+                  larp.socketsend(that, 'refresh')
+                },
+              })
+            } else {
             }
-          })
+          }
+        })
       },
     })
-
-
   },
-
   vote: function () {
     let that = this
         wx.request({
@@ -385,7 +368,8 @@ Page({
             acquiredclue: that.data.acquiredclue,
             broadcast: that.data.broadcast,
             vote: that.data.pickvote,
-            actionpoint: that.data.actionpoint
+            actionpoint: that.data.actionpoint,
+            signature: md5.hexMD5(that.data.user_id + "xiaomaomi")
           },
           method: "PUT",
           success: function (res) {
@@ -434,7 +418,6 @@ Page({
     let that = this;
     var locationid = e.target.id;
     var cluecount = this.data.gameinfo.cluelocation[locationid].count
-
     console.log(that.data.gameinfo.cluemethod)
     if (that.data.gameinfo.cluemethod == "return") {
       var cluenumber = Math.floor(Math.random() * cluecount)
@@ -457,7 +440,8 @@ Page({
             acquiredclue: that.data.acquiredclue,
             broadcast: that.data.broadcast,
             vote: that.data.vote,
-            actionpoint: that.data.actionpoint
+            actionpoint: that.data.actionpoint,
+            signature: md5.hexMD5(that.data.user_id + "xiaomaomi")
           },
           method: "PUT",
           success: function () {
@@ -474,8 +458,6 @@ Page({
     } else if (that.data.gameinfo.cluemethod == "order") {
 
     } else if (that.data.gameinfo.cluemethod == "random") {
-
-
       if (that.data.actionpoint > 0) {
         wx.showToast({ title: '正在获取', icon: 'loading', duration: 2000 });
         that.setData({
@@ -524,7 +506,8 @@ Page({
               wx.request({
                 url: larp.backendurl + '/' + that.data.table_id,
                 data: {
-                  cluestatus: that.data.cluestatus
+                  cluestatus: that.data.cluestatus,
+                  signature: md5.hexMD5(that.data.table_id + "xiaomaomi")
                 },
                 method: "PUT",
                 success: function () {
@@ -534,7 +517,7 @@ Page({
             } else {
               wx.showModal({
                 title: '线索',
-                content: '你毫无所获。    你的剩余行动点：' + that.data.actionpoint,
+                content: '你毫无所获。你的剩余行动点：' + that.data.actionpoint,
                 showCancel: false
               })
             }
@@ -544,7 +527,8 @@ Page({
                 acquiredclue: that.data.acquiredclue,
                 broadcast: that.data.broadcast,
                 vote: that.data.vote,
-                actionpoint: that.data.actionpoint
+                actionpoint: that.data.actionpoint,
+                signature: md5.hexMD5(that.data.user_id + "xiaomaomi")
               },
               method: "PUT",
               success: function () {
@@ -572,24 +556,54 @@ Page({
     console.log(e.detail.value)
   },
 
-  bindFormSubmit: function (e) {
+  broadcastSubmit: function (e) {
     let that = this
     that.setData({
       broadcast: e.detail.value.textarea,
     })
-    console.log(e.detail.value.textarea)
-    console.log(this.data.broadcast)
     wx.request({
-      url: larp.backendurl + '/' + that.data.user_id,
-      data: {
-        broadcast: that.data.broadcast
-      },
-      method: "PUT",
+      url: larp.backendurl + '?type=user&select=characterid&select=broadcast&tableid=' + that.data.tableid,
       success: function (res) {
-        console.log("succeeded")
+        wx.request({
+          url: larp.backendurl + '/' + that.data.table_id,
+          data: {
+            globalbroadcast: res.data.map(function (obj) {
+              if (obj.characterid == that.data.characterid) {
+                return { ...obj, broadcast: e.detail.value.textarea }
+              } else {
+                return obj
+              }
+            }),
+            signature: md5.hexMD5(that.data.table_id + "xiaomaomi")
+          },
+          method: "PUT",
+          success: function (res) {
+            console.log("succeeded")
+            larp.socketsend(that, 'refresh')
+          }
+        });
+        that.setData({
+          globalbroadcast: res.data.map(function (obj) { 
+            if (obj.characterid == that.data.characterid) { 
+              return { ...obj, broadcast: e.detail.value.textarea}
+            }else{
+              return obj
+            }
+          })
+        })
+        wx.request({
+          url: larp.backendurl + '/' + that.data.user_id,
+          data: {
+            broadcast: e.detail.value.textarea,
+            signature: md5.hexMD5(that.data.user_id + "xiaomaomi")
+          },
+          method: "PUT",
+          success: function (res) {
+            console.log("succeeded")
+          }
+        });
       }
     });
-    larp.socketsend(that, 'refresh')
   },
   save: function (e) {
     let that = this
@@ -623,7 +637,8 @@ Page({
           wx.request({
             url: larp.backendurl + '/' + res.data[user]._id,
             data: {
-              actionpoint: point
+              actionpoint: point,
+              signature: md5.hexMD5(res.data[user]._id+"xiaomaomi")
             },
             method: "PUT",
             success: function (res) {
@@ -645,7 +660,8 @@ Page({
           wx.request({
             url: larp.backendurl + '/' + res.data[user]._id,
             data: {
-              vote: -1
+              vote: -1,
+              signature: md5.hexMD5(res.data[user]._id+"xiaomaomi")
             },
             method: "PUT",
             success: function (res) {
@@ -657,153 +673,84 @@ Page({
       },
     });
   },
-
-  onLoad: function (options) {
+  getsession: function (ispaused){
     let that = this
-    var content = ''
-    var cast
-    console.log(options)
-    if(options.firsttime==0){
+    ispaused = true
+    if (!app.globalData.unionid) {
+      console.log("waiting unionid")
+      setTimeout(function () { that.getsession() }, 300);
+    } else {
       that.setData({
-        currenttutorial: 0        
+        tableid: wx.getStorageSync('tableid'),
+        gameid: wx.getStorageSync('gameid'),
+        characterid: wx.getStorageSync('characterid'),
+        user_id: wx.getStorageSync('user_id'),
+        table_id: wx.getStorageSync('table_id'),
+        usernickname: app.globalData.unionid
       })
     }
-    var ispaused=false
-    function getsession(){
-      ispaused = true
-      try{
-      that.setData({
-      tableid: wx.getStorageSync('tableid'),
-      gameid: wx.getStorageSync('gameid'),
-      characterid: wx.getStorageSync('characterid'),
-      user_id: wx.getStorageSync('user_id'),
-      table_id: wx.getStorageSync('table_id'),
-      usernickname: app.globalData.unionid
-    })
-    }catch(e){
-      wx.reLaunch({
-        url: '../index/index',
-      })
-    }
-      ispaused = false
-    }
-    function waitForIt() {
-      getsession()
-      if (ispaused) {
-        console.log("waiting")
-        setTimeout(function () { waitForIt() }, 100);
-      } else {
-
-    wx.request({
-      url: larp.backendurl + '/' + that.data.table_id,
-      success: function (res) {
-        console.log(res.satusCode)
-        if (res.statusCode == 404 && that.data.table_id){
-          wx.showModal({
-            title: '房间不存在',
-            content: '房间不存在, 请从转发链接重新进入',
-            showCancel: false,
-            complete: function(res) {
-              wx.request({
-                url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
-                success: function (res) {
-                  console.log(res.data)
-                  for (user in res.data) {
-                    wx.request({
-                      url: larp.backendurl + '/' + res.data[user]._id,
-                      method: 'DELETE',
-                      success: function () {
-                        console.log("deleted")
-                      },
-                    })
-                  }
-                },
-              })
-              larp.cleardata()
-            }
-          })
-
-        }else{
-        that.setData({
-          roundnumber: res.data.roundnumber,
-          hostname: res.data.hostid,
-          cluestatus: res.data.cluestatus
-        })
-        }
-      }
-    });
-    wx.request({
-      url: larp.backendurl + '/' + that.data.user_id,
-      success: function (res) {
-        that.setData({
-          acquiredclue: res.data.acquiredclue,
-          broadcast: res.data.broadcast,
-          vote: res.data.vote,
-          actionpoint: res.data.actionpoint
-        })
-      },
-    });
-    wx.request({
-      url: larp.backendurl + '?type=character&gameid=' + that.data.gameid + '&characterid=' + that.data.characterid,
-      success: function (res) {
-        that.setData({
-          characterinfo: res.data[0],
-          characterplot: res.data[0].characterplot,
-        })
-      },
-    });
-    wx.request({
-      url: larp.backendurl + '?type=game&id=' + that.data.gameid,
-      success: function (res) {
-        that.setData({
-          gameinfo: res.data[0],
-          mainplot: res.data[0].mainplot,
-          cluestatus: res.data[0].cluestatus
-        })
-      },
-      complete: function () {
-        wx.request({
-          url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
-          success: function (res) {
-            console.log(res.data)
-            that.setData({
-              globalbroadcast: res.data
+    ispaused = false
+  },
+  Pageload: function (ispaused) {
+    let that=this
+    this.getsession()
+    if (ispaused) {
+      console.log("waiting session")
+      setTimeout(function () { that.Pageload() }, 300);
+    } else {
+      wx.request({
+        url: larp.backendurl + '/' + that.data.table_id,
+        success: function (res) {
+          console.log(res.satusCode)
+          if ((res.statusCode == 404 && that.data.table_id) || !that.data.table_id) {
+            wx.showModal({
+              title: '房间不存在',
+              content: '房间不存在或数据过期, 请从转发链接重新进入',
+              showCancel: false,
+              complete: function (res) {
+                larp.cleardata()
+              }
             })
-          },
-        })
-      }
-    });
-
-
-
-
-    wx.connectSocket({
-      url: 'wss://chinabackend.bestlarp.com',
-    })
-    wx.onSocketOpen(function (res) {
-      console.log('WebSocket is on.')
-      larp.socketsend(that, 'join')
-    })
-    wx.onSocketMessage(function (res) {
-      console.log("socketwork")
-      var recieved = JSON.parse(res.data)
-      if (recieved.table_id == that.data.table_id) {
-
-        if (recieved.message == "refresh" || recieved.message == "join") {
-          wx.showToast({ title: '信息更新', icon: 'loading', duration: 1000 });
-          var content = ''
-          var cast
-          wx.request({
-            url: larp.backendurl + '/' + that.data.table_id,
-            success: function (res) {
-              that.setData({
-                roundnumber: res.data.roundnumber,
-                updatetab: [true, true, true, true, true, true]
-              })
-            },
+          } else {
+            that.setData({
+              roundnumber: res.data.roundnumber,
+              hostname: res.data.hostid,
+              cluestatus: res.data.cluestatus
+            })
+          }
+        }
+      });
+      wx.request({
+        url: larp.backendurl + '/' + that.data.user_id,
+        success: function (res) {
+          that.setData({
+            acquiredclue: res.data.acquiredclue,
+            broadcast: res.data.broadcast,
+            vote: res.data.vote,
+            actionpoint: res.data.actionpoint
           })
+        },
+      });
+      wx.request({
+        url: larp.backendurl + '?type=character&gameid=' + that.data.gameid + '&characterid=' + that.data.characterid,
+        success: function (res) {
+          that.setData({
+            characterinfo: res.data[0]
+          })
+        },
+      });
+      wx.request({
+        url: larp.backendurl + '?type=game&id=' + that.data.gameid,
+        success: function (res) {
+          that.setData({
+            gameinfo: res.data[0],
+            cluestatus: res.data[0].cluestatus
+          })
+          wx.hideLoading()
+        },
+        complete: function () {
           wx.request({
-            url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
+            url: larp.backendurl + '?type=user&select=characterid&select=broadcast&tableid=' + that.data.tableid,
             success: function (res) {
               console.log(res.data)
               that.setData({
@@ -811,51 +758,100 @@ Page({
               })
             },
           })
-        } else if (recieved.message == "setactionpoint") {
-          wx.showToast({ title: '刷新行动点', icon: 'loading', duration: 1000 });
-          wx.request({
-            url: larp.backendurl + '/' + that.data.user_id,
-            success: function (res) {
-              console.log(res.data)
-              that.setData({
-                actionpoint: res.data.actionpoint
-              })
-            },
-          })
-        } else if (recieved.message == "sendclue") {
-          if (recieved.user_id == that.data.user_id) {
-            wx.showToast({ title: '收到线索', icon: 'loading', duration: 1000 });
+        }
+      });
+      wx.connectSocket({
+        url: 'wss://chinabackend.bestlarp.com',
+      })
+      wx.onSocketOpen(function (res) {
+        console.log('WebSocket is on.')
+        larp.socketsend(that, 'join')
+      })
+      wx.onSocketMessage(function (res) {
+        console.log("socketwork")
+        var recieved = JSON.parse(res.data)
+        if (recieved.table_id == that.data.table_id) {
+          if (recieved.message == "refresh" || recieved.message == "join") {
+            wx.showToast({ title: '信息更新', icon: 'loading', duration: 1000 });
+            var content = ''
+            var cast
+            wx.request({
+              url: larp.backendurl + '/' + that.data.table_id,
+              success: function (res) {
+                that.setData({
+                  roundnumber: res.data.roundnumber,
+                  updatetab: [true, true, true, true, true, true]
+                })
+              },
+            })
+            wx.request({
+              url: larp.backendurl + '?type=user&select=characterid&select=broadcast&tableid=' + that.data.tableid,
+              success: function (res) {
+                console.log(res.data)
+                that.setData({
+                  globalbroadcast: res.data
+                })
+              },
+            })
+          } else if (recieved.message == "setactionpoint") {
+            wx.showToast({ title: '刷新行动点', icon: 'loading', duration: 1000 });
             wx.request({
               url: larp.backendurl + '/' + that.data.user_id,
               success: function (res) {
                 console.log(res.data)
                 that.setData({
-                  acquiredclue: res.data.acquiredclue
+                  actionpoint: res.data.actionpoint
+                })
+              },
+            })
+          } else if (recieved.message == "sendclue") {
+            if (recieved.user_id == that.data.user_id) {
+              wx.showToast({ title: '收到线索', icon: 'loading', duration: 1000 });
+              wx.request({
+                url: larp.backendurl + '/' + that.data.user_id,
+                success: function (res) {
+                  console.log(res.data)
+                  that.setData({
+                    acquiredclue: res.data.acquiredclue
+                  })
+                },
+              })
+            }
+          } else if (recieved.message == "revote") {
+            wx.showToast({ title: '重新投票', icon: 'loading', duration: 1000 });
+            wx.request({
+              url: larp.backendurl + '/' + that.data.user_id,
+              success: function (res) {
+                console.log(res.data)
+                that.setData({
+                  vote: res.data.vote
                 })
               },
             })
           }
-        } else if (recieved.message == "revote") {
-          wx.showToast({ title: '重新投票', icon: 'loading', duration: 1000 });
-          wx.request({
-            url: larp.backendurl + '/' + that.data.user_id,
-            success: function (res) {
-              console.log(res.data)
-              that.setData({
-                vote: res.data.vote
-              })
-            },
-          })
         }
-      }
-    })
-    wx.onSocketClose(function (res) {
-      wx.reLaunch({
-        url: '../index/index'
       })
+      wx.onSocketClose(function (res) {
+        wx.reLaunch({
+          url: '../index/index'
+        })
+      })
+    }
+  },
+  onLoad: function (options) {
+    let that = this
+    var content = ''
+    var cast
+    wx.showLoading({
+      title: '正在加载数据',
     })
-      }}
-      waitForIt()
+    if(options.firsttime==0){
+      that.setData({
+        currenttutorial: 0        
+      })
+    }
+    var ispaused=false
+    this.Pageload(ispaused)
   },
   onHide: function () {
     console.log(this.data.user_id)

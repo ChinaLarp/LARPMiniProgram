@@ -1,6 +1,7 @@
 // pages/create/create.js
 const app = getApp()
 var larp = require('../../utils/util.js')
+var md5 = require('../../utils/md5.js')
 function makerd() {
   var text = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -33,7 +34,10 @@ Page({
         if(res.data.length!=0){
         wx.request({
           url: larp.backendurl + '/' + res.data[0]._id,
-          method:'DELETE',
+          method: 'DELETE',
+          data: {
+            signature: md5.hexMD5(res.data[0]._id + "xiaomaomi")
+          },
           complete: function(){
             console.log('deleted')
             wx.reLaunch({
@@ -52,6 +56,9 @@ Page({
         for(user in res.data){
         wx.request({
           url: larp.backendurl + '/' + res.data[user]._id,
+          data: {
+            signature: md5.hexMD5(res.data[user]._id + "xiaomaomi")
+          },
           method: 'DELETE',
           success: function () {
           },
@@ -114,8 +121,10 @@ Page({
             gamename: res.data[0].name,
             gameid: options.gameid,
             vote: [],
+            globalbroadcast:[],
             roundnumber: 0,
-            cluestatus: res.data[0].cluestatus
+            cluestatus: res.data[0].cluestatus,
+            signature:md5.hexMD5("xiaomaomi")
           },
           method: "POST",
           success: function (res) {
