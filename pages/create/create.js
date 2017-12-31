@@ -109,7 +109,7 @@ Page({
           url: larp.backendurl + '/',
           data: {
             type: "table",
-            hostid: app.globalData.userInfo.nickName,
+            hostid: app.globalData.unionid,
             tableid: tableid,
             gamename: res.data[0].name,
             gameid: options.gameid,

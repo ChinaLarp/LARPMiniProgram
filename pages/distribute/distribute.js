@@ -1,7 +1,6 @@
 const app = getApp()
 var larp = require('../../utils/util.js')
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -33,7 +32,7 @@ Page({
                     tableid: that.data.tableid,
                     gameid: that.data.gameid,
                     characterid: that.data.characterid,
-                    usernickname: app.globalData.userInfo.nickName,
+                    usernickname: app.globalData.unionid,
                     actionpoint: 0,
                     vote: -1
                   },
@@ -67,7 +66,7 @@ Page({
                     })
                   }
                 });
-              } else if (res.data[0].usernickname == app.globalData.userInfo.nickName) {
+              } else if (res.data[0].usernickname == app.globalData.unionid) {
                 wx.showToast({ title: '读取房间', icon: 'loading', duration: 2000 });
                 wx.setStorage({
                   key: "tableid",
@@ -145,7 +144,8 @@ Page({
         success: function (res) {
           that.setData({
             character: res.data[0],
-            characterid: options.id
+            characterid: options.id,
+            tableid: options.tableid
           })
         }
       })
@@ -163,9 +163,14 @@ Page({
       wx.request({
         url: larp.backendurl + '?type=table&tableid=' + options.tableid,
         success: function (res) {
+          if(res.data.length==0){
+            wx.showModal({
+              title: '房间已删除',
+            })
+          }else{
           that.setData({
             table_id: res.data[0]._id
-          })
+          })}
         }
       })
 

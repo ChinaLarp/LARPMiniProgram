@@ -6,6 +6,11 @@ Page({
     gamelist:[],
     currentgame:{}
   },
+  onPullDownRefresh: function () {
+    console.log('onPullDownRefresh');
+    this.onShow()
+    wx.stopPullDownRefresh()
+  },
   navigate: function (e) {
     wx.showToast({ title: '敬请期待', icon: 'loading', duration: 1000 });
     
@@ -30,7 +35,7 @@ Page({
                 title: '正在创建房间',
               })
               wx.request({
-                url: larp.backendurl + '?type=table&hostid=' + app.globalData.userInfo.nickName,
+                url: larp.backendurl + '?type=table&hostid=' + app.globalData.unionid,
                 success: function(res){
                   var table
                   for (table in res.data) {
@@ -52,7 +57,7 @@ Page({
                 }
               })
               wx.request({
-                url: larp.backendurl + '?type=user&usernickname=' + app.globalData.userInfo.nickName,
+                url: larp.backendurl + '?type=user&usernickname=' + app.globalData.unionid,
                 success: function (res) {
                   var user
                   for (user in res.data) {
@@ -84,12 +89,13 @@ Page({
       title: '获取游戏列表',
     })
     function waitglobal() {
-      if (app.globalData.userInfo==undefined) {
+      if (app.globalData.unionid==undefined) {
         console.log("waiting")
         setTimeout(function () { waitglobal() }, 1000);
       } else {
+        //console.log(app.globalData.unionid)
         wx.request({
-          url: larp.backendurl + '?type=table&hostid=' + app.globalData.userInfo.nickName,
+          url: larp.backendurl + '?type=table&hostid=' + app.globalData.unionid,
           success: function (res) {
             console.log(res.data)
             if (res.data.length != 0) {
@@ -100,7 +106,6 @@ Page({
               wx.request({
                 url: larp.backendurl + '?type=game',
                 success: function (res) {
-                  console.log(res.data)
                   that.setData({
                     gamelist: res.data
                   })

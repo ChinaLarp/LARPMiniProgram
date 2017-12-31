@@ -5,7 +5,7 @@ var larp = require('../../utils/util.js')
 Page({
   data: {
     updatetab: [false, false, false, false, false, false],
-    tutorial: ["https://chinabackend.bestlarp.com/pic/tutorial0", "https://chinabackend.bestlarp.com/pic/tutorial1", "https://chinabackend.bestlarp.com/pic/tutorial2", "https://chinabackend.bestlarp.com/pic/tutorial3", "https://chinabackend.bestlarp.com/pic/tutorial4", "https://chinabackend.bestlarp.com/pic/tutorial5"],
+    tutorial: ["https://chinabackend.bestlarp.com/pic/tutorial0",      "https://chinabackend.bestlarp.com/pic/tutorial1", "https://chinabackend.bestlarp.com/pic/tutorial2", "https://chinabackend.bestlarp.com/pic/tutorial3", "https://chinabackend.bestlarp.com/pic/tutorial4", "https://chinabackend.bestlarp.com/pic/tutorial5"],
     currenttutorial: -1,
     animationData: {},
     user_id: '',
@@ -43,7 +43,63 @@ Page({
     },
     seeimage:-1
   },
+  refresh: function (e) {
+    let that = this
+    wx.showLoading({
+      title: '刷新信息',
+    })
+    console.log("refresh")
+    wx.request({
+      url: larp.backendurl + '/' + that.data.table_id,
+      success: function (res) {
+        //console.log(res.satusCode)
+        if (res.statusCode == 404 && that.data.table_id) {
+          wx.showModal({
+            title: '房间不存在',
+            content: '房间不存在, 请从转发链接重新进入',
+            showCancel: false,
+            complete: function (res) {
+              wx.request({
+                url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
+                success: function (res) {
+                  console.log(res.data)
+                  for (user in res.data) {
+                    wx.request({
+                      url: larp.backendurl + '/' + res.data[user]._id,
+                      method: 'DELETE',
+                      success: function () {
+                        console.log("deleted")
+                      },
+                    })
+                  }
+                },
+              })
+              larp.cleardata()
+            }
+          })
 
+        } else {
+          that.setData({
+            roundnumber: res.data.roundnumber,
+            hostname: res.data.hostid,
+            cluestatus: res.data.cluestatus
+          })
+        }
+      }
+    });
+    wx.request({
+      url: larp.backendurl + '/' + that.data.user_id,
+      success: function (res) {
+        that.setData({
+          acquiredclue: res.data.acquiredclue,
+          broadcast: res.data.broadcast,
+          vote: res.data.vote,
+          actionpoint: res.data.actionpoint
+        })
+        wx.hideLoading()
+      },
+    });
+  },
   //swiper
   nexttutorial: function (e) {
     console.log(e);
@@ -79,7 +135,7 @@ Page({
     that.data.touchtime = e.timeStamp;
     console.log('touchstartCallback');
     console.log(e);
- //图片缩放
+    //图片缩放
     if (e.touches.length === 1) {
       let { clientX, clientY } = e.touches[0];
       this.startX = clientX;
@@ -622,7 +678,7 @@ Page({
       characterid: wx.getStorageSync('characterid'),
       user_id: wx.getStorageSync('user_id'),
       table_id: wx.getStorageSync('table_id'),
-      usernickname: app.globalData.userInfo.nickName
+      usernickname: app.globalData.unionid
     })
     }catch(e){
       wx.reLaunch({
@@ -641,6 +697,7 @@ Page({
     wx.request({
       url: larp.backendurl + '/' + that.data.table_id,
       success: function (res) {
+        console.log(res.satusCode)
         if (res.statusCode == 404 && that.data.table_id){
           wx.showModal({
             title: '房间不存在',
@@ -728,9 +785,10 @@ Page({
       larp.socketsend(that, 'join')
     })
     wx.onSocketMessage(function (res) {
+      console.log("socketwork")
       var recieved = JSON.parse(res.data)
       if (recieved.table_id == that.data.table_id) {
-        console.log(recieved)
+
         if (recieved.message == "refresh" || recieved.message == "join") {
           wx.showToast({ title: '信息更新', icon: 'loading', duration: 1000 });
           var content = ''
@@ -753,7 +811,7 @@ Page({
               })
             },
           })
-        }else if (recieved.message == "setactionpoint") {
+        } else if (recieved.message == "setactionpoint") {
           wx.showToast({ title: '刷新行动点', icon: 'loading', duration: 1000 });
           wx.request({
             url: larp.backendurl + '/' + that.data.user_id,
@@ -765,7 +823,7 @@ Page({
             },
           })
         } else if (recieved.message == "sendclue") {
-          if (recieved.user_id == that.data.user_id){
+          if (recieved.user_id == that.data.user_id) {
             wx.showToast({ title: '收到线索', icon: 'loading', duration: 1000 });
             wx.request({
               url: larp.backendurl + '/' + that.data.user_id,
@@ -778,16 +836,16 @@ Page({
             })
           }
         } else if (recieved.message == "revote") {
-            wx.showToast({ title: '重新投票', icon: 'loading', duration: 1000 });
-            wx.request({
-              url: larp.backendurl + '/' + that.data.user_id,
-              success: function (res) {
-                console.log(res.data)
-                that.setData({
-                  vote: res.data.vote
-                })
-              },
-            })
+          wx.showToast({ title: '重新投票', icon: 'loading', duration: 1000 });
+          wx.request({
+            url: larp.backendurl + '/' + that.data.user_id,
+            success: function (res) {
+              console.log(res.data)
+              that.setData({
+                vote: res.data.vote
+              })
+            },
+          })
         }
       }
     })

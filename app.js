@@ -5,11 +5,21 @@ App({
     /*var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)*/
-
+    var appid ="wxf0487d45228f02d3"
+    var secret = "5cfc70f62660d126e14478a3db41d578"
     // 登录
+    let that = this
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        console.log(res)
+        wx.request({
+          url: 'https://chinabackend.bestlarp.com/unionid?appid=' + appid + '&secret=' + secret+'&js_code='+res.code+'&grant_type=authorization_code',
+          success:function(res){
+            console.log("unionid:" +res.data)
+            that.globalData.unionid = res.data
+          }
+        })
       }
     })
 
@@ -22,6 +32,7 @@ App({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
               this.globalData.userInfo = res.userInfo
+              //console.log(this)
 
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况

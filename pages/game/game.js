@@ -14,7 +14,7 @@ Page({
     let that = this
     if (options.tableid) {
       wx.request({
-        url: 'https://larpxiaozhushou.tk/api/table?tableid=' + options.tableid,
+        url: 'https://chinabackend.bestlarp.com/api/table?tableid=' + options.tableid,
         success: function (res) {
           if (res.data.length != 0) {
             that.setData({
@@ -24,7 +24,7 @@ Page({
               gameid: res.data[0].gameid
             })
             wx.request({
-              url: 'https://larpxiaozhushou.tk/api/character?gameid=' + that.data.gameid,
+              url: 'https://chinabackend.bestlarp.com/api/character?gameid=' + that.data.gameid,
               success: function (res) {
                 console.log(res.data)
                 that.setData({
@@ -41,7 +41,7 @@ Page({
         gameid: options.gameid,
       })
       wx.request({
-        url: 'https://larpxiaozhushou.tk/api/game?id=' + options.gameid,
+        url: 'https://chinabackend.bestlarp.com/api/game?id=' + options.gameid,
         success: function (res) {
           console.log(res)
           that.setData({
@@ -54,7 +54,7 @@ Page({
           //console.log(wx.getStorageSync('createtableid').length)
 
           wx.request({
-            url: 'https://larpxiaozhushou.tk/api/table/',
+            url: 'https://chinabackend.bestlarp.com/api/table/',
             data: {
               hostid: app.globalData.userInfo.nickName,
               tableid: that.data.tableid,
@@ -73,7 +73,7 @@ Page({
                 data: that.data.tableid
               });
               wx.request({
-                url: 'https://larpxiaozhushou.tk/api/character?gameid=' + that.data.gameid,
+                url: 'https://chinabackend.bestlarp.com/api/character?gameid=' + that.data.gameid,
                 success: function (res) {
                   console.log(res.data)
                   that.setData({
@@ -92,7 +92,7 @@ Page({
   onShow: function (e) {
     let that = this
     wx.request({
-      url: 'https://larpxiaozhushou.tk/api/game/',
+      url: 'https://chinabackend.bestlarp.com/api/game/',
       success: function (res) {
         that.setData({
           gamelist: res.data

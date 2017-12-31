@@ -13,7 +13,7 @@
           <view class="weui-article__p">
             {{character.characterdescription}}
           </view>
-        <button bindtap="enterroom">进入房间</button>
+        <button hidden="{{table_id==undefined}}" bindtap="enterroom">进入房间</button>
       </view>
     </view>
   </view>

@@ -7,7 +7,7 @@
       <swiper indicator-dots="true" autoplay="true" interval="3000" duration="500">
         <block wx:for-items="{{background}}" wx:key="index">
           <swiper-item>
-            <image class="swiper-item" src="https://chinabackend.bestlarp.com/pic/top{{item}}.png" style="width: 100%"></image>
+            <image class="swiper-item" src="https://chinabackend.bestlarp.com/pic/top{{item}}" style="width: 100%"></image>
           </swiper-item>
         </block>
       </swiper>
@@ -73,7 +73,26 @@
   </block>
 
 
-
-
+  <!--
+  <view class="form">
+    <view class="game">
+      <view class="pic bc_yellow" style="width: 55px; height: 55px;"></view>
+      <view class="info">
+        <view class="h1">
+          鸿门宴之上海滩
+        </view>
+        <view class="h2">
+          民国风云
+        </view>
+        <view class="h3">
+          Yummy酱又一力作
+        </view>
+      </view>
+    </view>
+    <view class="Dbtn">
+      <button class="detail" size="mini">详细介绍</button>
+    </view>
+  </view>
+-->
 
 </scroll-view>

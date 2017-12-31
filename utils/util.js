@@ -14,10 +14,12 @@ const formatNumber = n => {
 }
 var backendurl ='https://chinabackend.bestlarp.com/api/app'
 var socketsend=function(that,message){
+  var senddata = JSON.stringify({
+    table_id: that.data.table_id, message: message
+  })
+  console.log(senddata)
   wx.sendSocketMessage({
-    data: JSON.stringify({
-      table_id: that.data.table_id, message: message
-    }),
+    data: senddata,
   })
 }
 var databackup = function (that) {
@@ -56,10 +58,81 @@ var cleardata = function () {
     url: '../index/index'
   })
 }
+var socketwork = function (res) {
+  console.log("socketwork")
+  var recieved = JSON.parse(res.data)
+  if (recieved.table_id == that.data.table_id) {
+
+    if (recieved.message == "refresh" || recieved.message == "join") {
+      wx.showToast({ title: '信息更新', icon: 'loading', duration: 1000 });
+      var content = ''
+      var cast
+      wx.request({
+        url: larp.backendurl + '/' + that.data.table_id,
+        success: function (res) {
+          that.setData({
+            roundnumber: res.data.roundnumber,
+            updatetab: [true, true, true, true, true, true]
+          })
+        },
+      })
+      wx.request({
+        url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
+        success: function (res) {
+          console.log(res.data)
+          that.setData({
+            globalbroadcast: res.data
+          })
+        },
+      })
+    } else if (recieved.message == "setactionpoint") {
+      wx.showToast({ title: '刷新行动点', icon: 'loading', duration: 1000 });
+      wx.request({
+        url: larp.backendurl + '/' + that.data.user_id,
+        success: function (res) {
+          console.log(res.data)
+          that.setData({
+            actionpoint: res.data.actionpoint
+          })
+        },
+      })
+    } else if (recieved.message == "sendclue") {
+      if (recieved.user_id == that.data.user_id) {
+        wx.showToast({ title: '收到线索', icon: 'loading', duration: 1000 });
+        wx.request({
+          url: larp.backendurl + '/' + that.data.user_id,
+          success: function (res) {
+            console.log(res.data)
+            that.setData({
+              acquiredclue: res.data.acquiredclue
+            })
+          },
+        })
+      }
+    } else if (recieved.message == "revote") {
+      wx.showToast({ title: '重新投票', icon: 'loading', duration: 1000 });
+      wx.request({
+        url: larp.backendurl + '/' + that.data.user_id,
+        success: function (res) {
+          console.log(res.data)
+          that.setData({
+            vote: res.data.vote
+          })
+        },
+      })
+    }
+  }
+}
+
+var tableuserinfo = function(that){
+  
+}
 module.exports = {
   formatTime: formatTime,
   socketsend: socketsend,
   databackup: databackup,
   backendurl: backendurl,
-  cleardata: cleardata
+  cleardata: cleardata,
+  socketwork: socketwork,
+  tableuserinfo:tableuserinfo
 }

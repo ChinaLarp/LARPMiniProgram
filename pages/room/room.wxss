@@ -11,6 +11,12 @@ page, .page {
   overflow: hidden;
 }
 
+.fresh {
+  position: fixed;
+  top: 10rpx;
+  right: 10rpx;
+}
+
 .article {
   padding: 10rpx;
   font-size: 32rpx;
@@ -53,7 +59,7 @@ page, .page {
 .swiperit {
   width: 100%;
   background-repeat: round;
-  background-image: url(http://larpxiaozhushou.tk/pic/background);
+  background-image: url(https://chinabackend.bestlarp.com/pic/background);
 }
 
 .swipscroll {
