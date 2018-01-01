@@ -22,5 +22,7 @@
 }
 .page {
   height: 100%;
-  width: 100%
+  width: 100%;
+  background-repeat: round;
+  background-image: url(https://chinabackend.bestlarp.com/pic/background.png);
 }

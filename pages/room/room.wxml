@@ -3,10 +3,14 @@
   <!--全屏图片-->
   <block wx:for="{{acquiredclue}}" wx:for-item="clue" wx:key="index" style="justify-content: center; align-items: center">
     <view id="{{index}}" hidden="{{seeimage!=index}}" style="height:100%; width:100%; background: black;">
-      <image catchtouchstart="touchstartCallback" catchtouchmove="touchmoveCallback" catchtouchend="touchendCallback" style="transform:translate({{stv.offsetX}}px, {{stv.offsetY}}px) scale({{stv.scale}}); " mode="widthFix" wx:if="{{clue.image}}" src="{{clue.image}}">
+      <image catchtouchstart="touchstartCallback" catchtouchmove="touchmoveCallback" catchtouchend="touchendCallback" style="transform:translate({{stv.offsetX}}px, {{stv.offsetY}}px) scale({{stv.scale}}); " mode="widthFix" wx:if="{{clue.image}}" src="https://chinabackend.bestlarp.com/pic/{{clue.image}}">
       </image>
     </view>
   </block>
+  <view hidden="{{seeimage!=-2}}" style="height:100%; width:100%; background: black;">
+      <image catchtouchstart="touchstartCallback" catchtouchmove="touchmoveCallback" catchtouchend="touchendCallback" style="transform:translate({{stv.offsetX}}px, {{stv.offsetY}}px) scale({{stv.scale}}); " mode="widthFix" wx:if="{{gameinfo.mapurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.mapurl}}">
+      </image>
+  </view>
   <!--内容主体-->
   <swiper class="swiper" current="{{currentTab}}" duration="200" bindchange="swiperH">
     <swiper-item class="swiperit">
@@ -41,14 +45,14 @@
                   <view class="kind-list-text">{{plot.plotname}}</view>
                 </view>
                 <view class="kind-list-item-bd {{plotopen==index ? 'kind-list-item-bd-show' : ''}}">
-                  <view class="tx pdt">*公开信息</view>
+                  <view class="weui-article__h2 tx pdt">*公开信息</view>
                     <block wx:for="{{plot.content}}" wx:for-item="paragraph" wx:key="pindex">
                       <view>{{paragraph}}</view>
                     </block>
                     <block wx:if="{{characterinfo.characterplot[0].content[0].content}}">
-                      <view class="tx pdt">*个人信息</view>
+                      <view class="weui-article__h2 tx pdt">*个人信息</view>
                       <block wx:for="{{characterinfo.characterplot[index].content}}" wx:for-item="charactercontent" wx:key="cindex">
-                        <view class="tx pdt">{{charactercontent.type}}</view>
+                        <view class="weui-article__h3 tx pdt">{{charactercontent.type}}</view>
                         <block wx:for="{{charactercontent.content}}" wx:for-item="characterpara" wx:key="cpindex">
                           <view>{{characterpara}}</view>
                         </block>
@@ -116,7 +120,7 @@
       <scroll-view class="weui-article swipscroll" scroll-y="true">
         <view class="weui-article__h1 tx">搜集线索</view>
         <view wx:if="{{roundnumber>0}}">
-          <image wx:if="{{gameinfo.mapurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.mapurl}}" mode="widthFix" style="width: 98%; padding-top: 40rpx; padding-bottom: 40rpx"></image>
+          <image wx:if="{{gameinfo.mapurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.mapurl}}" bindtap="enlarge" id="-2" mode="widthFix" style="width: 98%; padding-top: 40rpx; padding-bottom: 40rpx"></image>
           <view style="display: flex; flex-direction: row; flex-wrap: wrap;">
             <block wx:for="{{gameinfo.cluelocation}}" wx:for-item="location" wx:key="index">
               <button wx:if="{{location.index!=characterinfo.banlocation}}" class="squareB" style="width: 40%;" bindtap='getclue' id='{{location.index}}'>{{location.name}}</button>

@@ -312,11 +312,9 @@ Page({
       picksend: e.detail.value
     })
   },
-
   enlarge: function (e) {
-    var image=e.target.id
     this.setData({
-      seeimage: image
+      seeimage: e.target.id
     })
   },
   //navigator
@@ -844,6 +842,9 @@ Page({
         }
       })
       wx.onSocketClose(function (res) {
+        wx.showLoading({
+          title: '断线重连'
+        })
         wx.connectSocket({
           url: 'wss://chinabackend.bestlarp.com',
         })
