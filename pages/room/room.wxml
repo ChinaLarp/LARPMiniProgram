@@ -42,14 +42,15 @@
                 <block wx:for="{{plot.content}}" wx:for-item="paragraph" wx:key="pindex">
                   <view>{{paragraph}}</view>
                 </block>
-                <view class="tx pdt">*个人信息</view>
-                <block wx:for="{{characterinfo.characterplot[plotindex].content}}" wx:for-item="charactercontent" wx:key="cindex">
-                  <viewclass="tx pdt">{{charactercontent.type}}</view>
-                  <block wx:for="{{charactercontent.content}}" wx:for-item="characterpara" wx:key="cpindex">
-                    <view>{{characterpara}}</view>
+                <block wx:if="{{characterinfo.characterplot[0].content[0].content}}">
+                  <view class="tx pdt">*个人信息</view>
+                  <block wx:for="{{characterinfo.characterplot[plotindex].content}}" wx:for-item="charactercontent" wx:key="cindex">
+                    <view class="tx pdt">{{charactercontent.type}}</view>
+                    <block wx:for="{{charactercontent.content}}" wx:for-item="characterpara" wx:key="cpindex">
+                      <view>{{characterpara}}</view>
+                    </block>
                   </block>
                 </block>
-              </block>
             </block>
           </block>
         </block>
