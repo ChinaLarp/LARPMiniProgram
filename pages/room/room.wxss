@@ -111,7 +111,7 @@ page, .page {
 }
 .kind-list-item {
   margin: 20rpx 0;
-  background-color: #FFFFFF;
+  background-color: rgba(255,255,255,0.3);
   border-radius: 4rpx;
   overflow: hidden;
 }
@@ -120,7 +120,7 @@ page, .page {
   display: flex;
   align-items: center;
 
-  transition: opacity .3s;
+  transition: opacity .5s;
 }
 .kind-list-item-hd-show {
   opacity: .2;
