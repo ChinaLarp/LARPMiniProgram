@@ -33,6 +33,7 @@ Page({
     currentclue: 0,
     picksend:null,
     touchtime: 0,
+    plotopen:-1,
     //图片放缩
     stv: {
       offsetX: 0,
@@ -42,6 +43,17 @@ Page({
       scale: 1,  //缩放倍数
     },
     seeimage:-1
+  },
+  kindToggle: function(e){
+    if (this.data.plotopen == e.currentTarget.id){
+      this.setData({
+        plotopen: -1
+      });
+    }else{
+    this.setData({
+      plotopen: e.currentTarget.id
+    });
+    }
   },
   refresh: function (e) {
     let that = this
@@ -780,7 +792,7 @@ Page({
               success: function (res) {
                 that.setData({
                   roundnumber: res.data.roundnumber,
-                  updatetab: [true, true, true, true, true, true]
+                  updatetab: [false, true, true, true, false, false]
                 })
               },
             })
@@ -832,8 +844,8 @@ Page({
         }
       })
       wx.onSocketClose(function (res) {
-        wx.reLaunch({
-          url: '../index/index'
+        wx.connectSocket({
+          url: 'wss://chinabackend.bestlarp.com',
         })
       })
     }
@@ -845,11 +857,15 @@ Page({
     wx.showLoading({
       title: '正在加载数据',
     })
-    if(options.firsttime==0){
-      that.setData({
-        currenttutorial: 0        
-      })
+    if (options) {
+      if (options.firsttime == 0) {
+        that.setData({
+          currenttutorial: 0
+        })
+      }
     }
+  },
+  onShow: function (){
     var ispaused=false
     this.Pageload(ispaused)
   },
