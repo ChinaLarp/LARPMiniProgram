@@ -64,7 +64,7 @@ Page({
                       key: "table_id",
                       data: that.data.table_id
                     });
-                    wx.navigateTo({
+                    wx.redirectTo({
                       url: '../room/room?firsttime=0',
                     })
                   }
@@ -91,7 +91,7 @@ Page({
                   key: "table_id",
                   data: that.data.table_id
                 });
-                wx.navigateTo({
+                wx.redirectTo({
                   url: '../room/room',
                 })
               } else {
@@ -113,6 +113,9 @@ Page({
   onLoad: function (options) {
     let that = this
     wx.hideShareMenu({})
+    wx.showLoading({
+      title: '加载中',
+    })
     if(options.type=='table'){
       this.setData({
         displaytype: options.type
@@ -133,6 +136,7 @@ Page({
             gameinfo: res.data[0],
             gamename:res.data[0].name
           })
+          wx.hideLoading()
         }
       })
 
@@ -173,7 +177,9 @@ Page({
           }else{
           that.setData({
             table_id: res.data[0]._id
-          })}
+            })
+          }
+          wx.hideLoading()
         }
       })
 
