@@ -27,6 +27,12 @@
             {{item.description}}
           </view>
         </block>
+          <view class="weui-article__h3">
+            <button class="ppl" size="mini" open-type="share" id="host">主持人</button>
+          </view>
+          <view class="weui-article__p">
+            主持人不参与游戏，但可以以第三视角控制游戏流程（可有可无）。
+          </view>
       </view>
     </view>
   </view>

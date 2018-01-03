@@ -148,13 +148,21 @@ Page({
       title: '游戏及人介绍',
       imageUrl: '/icon/detect_shop.png',
       path: 'pages/distribute/distribute?tableid=' + that.data.tableid + '&gameid=' + that.data.gameid + '&type=table',
-    }}else{
+    }
+    } else if(res.target.id=='host') {
+      // 来自页面内转发按钮
+      return {
+        title: '人物码: 主持人',
+        imageUrl: '/icon/detect_shop.png',
+        path: 'pages/distribute/distribute?tableid=' + that.data.tableid + '&gameid=' + that.data.gameid + '&type=host'
+      }
+    } else {
       // 来自页面内转发按钮
       return {
         title: '人物码: ' + that.data.characterlist[res.target.id].name,
-      imageUrl: '/icon/detect_shop.png',
-      path: 'pages/distribute/distribute?id=' + res.target.id + '&tableid=' + that.data.tableid + '&gameid=' + that.data.gameid + '&type=character'
+        imageUrl: '/icon/detect_shop.png',
+        path: 'pages/distribute/distribute?id=' + res.target.id + '&tableid=' + that.data.tableid + '&gameid=' + that.data.gameid + '&type=character'
+      }
     }
-  }
 }
 })

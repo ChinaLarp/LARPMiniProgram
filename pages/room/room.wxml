@@ -84,7 +84,7 @@
 
 
     <swiper-item class="swiperit">
-      <view class="weui-article" style="height: 100%;">
+      <view wx:if="{{characterid!=-1}}" class="weui-article" style="height: 100%;">
         <view class="weui-article__h1 tx">我的线索</view>
         <swiper indicator-dots="true" vertical bindchange="swiperV" current="0" style="height: 70%; width: 103%; padding-top: 10rpx; overflow: visible;">
           <block wx:for="{{acquiredclue}}" wx:for-item="clue" wx:key="index">
@@ -117,7 +117,7 @@
     </swiper-item>
 
     <swiper-item class="swiperit">
-      <scroll-view class="weui-article swipscroll" scroll-y="true">
+      <scroll-view wx:if="{{characterid!=-1}}" class="weui-article swipscroll" scroll-y="true">
         <view class="weui-article__h1 tx">搜集线索</view>
         <view wx:if="{{roundnumber>0}}">
           <image wx:if="{{gameinfo.mapurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.mapurl}}" bindtap="enlarge" id="-2" mode="widthFix" style="width: 98%; padding-top: 40rpx; padding-bottom: 40rpx"></image>
@@ -158,17 +158,18 @@
             <view class="square" style="height: 38%;">
               <scroll-view class="notepad" style="height: 100%" scroll-y="true">
                 <block wx:for="{{globalbroadcast}}">
-                  <view class="tx" style="margin: 5rpx; font-size:28rpx"> {{gameinfo.characterlist[item.characterid].name}} </view>
+                  <view hidden="{{item.characterid==-1}}" class="tx" style="margin: 5rpx; font-size:28rpx"> {{gameinfo.characterlist[item.characterid].name}} </view>
+                  <view hidden="{{item.characterid!=-1}}" class="tx" style="margin: 5rpx; font-size:28rpx"> 主持人 </view>
                   <view style="word-break: break-all; white-space: pre-line; font-size: 26rpx;"> {{item.broadcast}} </view>
                 </block>
               </scroll-view>
             </view>
             <view>
-              <form bindsubmit="setactionpoint" hidden='{{hostname!=usernickname}}'>
+              <form bindsubmit="setactionpoint" hidden='{{hostname!=usernickname && characterid!=-1}}'>
                 <slider value="3" activeColor="orange" min="0" max="10" show-value name="point" />
                 <button class="squareB" form-type="submit"> 设置行动点 </button>
               </form>
-              <button class="squareB" bindtap='nextround' hidden='{{hostname!=usernickname}}'>进入下一回合</button>
+              <button class="squareB" bindtap='nextround' hidden='{{hostname!=usernickname && characterid!=-1}}'>进入下一回合</button>
               <block wx:if="{{vote==-1&&gameinfo.mainplot[roundnumber].plotname=='指认凶手'}}">
                 <view style="display: flex; flex-direction: row; width: 100%; align-items: center; justify-content: space-around">
                   <picker bindchange="pickvote" range="{{gameinfo.characterlist}}" range-key="name" style="width: 50%">

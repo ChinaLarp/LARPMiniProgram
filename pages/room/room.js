@@ -411,7 +411,7 @@ Page({
         console.log(res.data)
         for (vote in res.data) {
           console.log(res.data[vote].vote)
-          if (res.data[vote].vote > -1) {
+          if (res.data[vote].vote > -1 && res.data[vote].characterid!=-1) {
             content = content + that.data.gameinfo.characterlist[res.data[vote].characterid].name + ' : ' + that.data.gameinfo.characterlist[res.data[vote].vote].name + ' \ '
           }
         }
