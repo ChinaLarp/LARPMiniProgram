@@ -44,6 +44,12 @@ Page({
     },
     seeimage:-1
   },
+  diskindToggle: function (e) {
+    wx.showToast({
+      title: '还未进行到此回合',
+      icon: 'loading'
+    })
+  },
   kindToggle: function(e){
     if (this.data.plotopen == e.currentTarget.id){
       this.setData({
@@ -342,7 +348,8 @@ Page({
           var plotname = '确认进入下一回合：“' + that.data.gameinfo.mainplot[that.data.roundnumber + 1].plotname + '” 吗?'
         }catch(e){
           //console.log(e)
-          var plotname = "已经是最后一回合，请点击退出房间"
+          var plotname = "游戏结束，确定退出游戏吗?"
+          var end = true
         }
         if (res.data.length != that.data.gameinfo.playernumber) {
           plotname = "人数未齐！"+plotname
@@ -351,7 +358,43 @@ Page({
           title: '进入下回合',
           content:plotname,
           success: function (res) {
-            if (res.confirm) {
+            if (end && res.confirm){
+              wx.showLoading({
+                title: '正在删除房间',
+              })
+              var user
+              wx.request({
+                url: larp.backendurl + '/' + that.data.table_id,
+                method: 'DELETE',
+                data: {
+                  signature: md5.hexMD5(that.data.table_id + "xiaomaomi")
+                },
+                complete: function () {
+                  console.log('deleted')
+                  wx.reLaunch({
+                    url: '../shop/shop'
+                  })
+                  wx.hideLoading()
+                }
+              })
+              wx.request({
+                url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
+                success: function (res) {
+                  console.log(res.data)
+                  for (user in res.data) {
+                    wx.request({
+                      url: larp.backendurl + '/' + res.data[user]._id,
+                      data: {
+                        signature: md5.hexMD5(res.data[user]._id + "xiaomaomi")
+                      },
+                      method: 'DELETE',
+                      success: function () {
+                      },
+                    })
+                  }
+                },
+              })
+            }else if (res.confirm) {
               wx.request({
                 url: larp.backendurl + '/' + that.data.table_id,
                 data: {
@@ -615,6 +658,7 @@ Page({
       }
     });
   },
+  /*
   save: function (e) {
     let that = this
     console.log(this.data.user_id)
@@ -634,31 +678,39 @@ Page({
   },
   clearinfo: function (e) {
     larp.cleardata()
-  },
+  },*/
   setactionpoint: function (e) {
     var point = e.detail.value.point
     var user
     let that = this
-    console.log(this.data.user_id)
-    wx.request({
-      url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
-      success: function (res) {
-        for (user in res.data) {
+    wx.showModal({
+      title: '发放行动点',
+      content: '你确定要向所有玩家发放'+ point +'点行动点吗?',
+      complete: function (res) {
+        if (res.confirm) {
           wx.request({
-            url: larp.backendurl + '/' + res.data[user]._id,
-            data: {
-              actionpoint: point,
-              signature: md5.hexMD5(res.data[user]._id+"xiaomaomi")
-            },
-            method: "PUT",
+            url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
             success: function (res) {
-              console.log("point added")
-              larp.socketsend(that, 'setactionpoint')
+              for (user in res.data) {
+                wx.request({
+                  url: larp.backendurl + '/' + res.data[user]._id,
+                  data: {
+                    actionpoint: res.data[user].actionpoint + point,
+                    signature: md5.hexMD5(res.data[user]._id + "xiaomaomi")
+                  },
+                  method: "PUT",
+                  success: function (res) {
+                    console.log("point added")
+                    larp.socketsend(that, 'setactionpoint')
+                  },
+                });
+              }
             },
           });
         }
-      },
-    });
+      }
+    })
+
   },
   revote: function (e) {
     let that=this
@@ -700,6 +752,12 @@ Page({
       })
     }
     ispaused = false
+  },
+  heartbeat: function () {
+    let that = this
+    larp.socketping()
+    console.log("ping")
+    setTimeout(function () { that.heartbeat() }, 40000);
   },
   Pageload: function (ispaused) {
     let that=this
@@ -776,11 +834,14 @@ Page({
       wx.onSocketOpen(function (res) {
         console.log('WebSocket is on.')
         larp.socketsend(that, 'join')
+        that.heartbeat()
       })
       wx.onSocketMessage(function (res) {
         console.log("socketwork")
         var recieved = JSON.parse(res.data)
-        if (recieved.table_id == that.data.table_id) {
+        if (recieved.message=="ping"){
+          console.log("pong")
+        } else if (recieved.table_id == that.data.table_id) {
           if (recieved.message == "refresh" || recieved.message == "join") {
             wx.showToast({ title: '信息更新', icon: 'loading', duration: 1000 });
             var content = ''
@@ -790,7 +851,7 @@ Page({
               success: function (res) {
                 that.setData({
                   roundnumber: res.data.roundnumber,
-                  updatetab: [false, true, true, true, false, false]
+                  updatetab: [false, false, false, false, false, false]
                 })
               },
             })

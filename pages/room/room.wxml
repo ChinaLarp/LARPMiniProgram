@@ -39,9 +39,8 @@
       <scroll-view class="weui-article swipscroll" scroll-y="true">
         <view class="weui-article__h1 tx">剧本信息：</view>
           <block wx:for="{{gameinfo.mainplot}}" wx:for-item="plot" wx:key="index">
-            <block wx:if="{{plot.plotid<=roundnumber}}">
-              <view class="kind-list-item">
-                <view id="{{index}}" class="kind-list-item-hd {{plotopen==index ? 'kind-list-item-hd-show' : ''}}" bindtap="kindToggle">
+              <view class="kind-list-item{{plot.plotid==roundnumber ? '-current ' : ''}}">
+                <view id="{{index}}" class="kind-list-item-hd {{plotopen==index ? 'kind-list-item-hd-show' : ''}}" bindtap="{{plot.plotid<=roundnumber ? 'kindToggle' : 'diskindToggle'}}">
                   <view class="kind-list-text">{{plot.plotname}}</view>
                 </view>
                 <view class="kind-list-item-bd {{plotopen==index ? 'kind-list-item-bd-show' : ''}}">
@@ -60,7 +59,6 @@
                     </block>
                 </view>
               </view>
-            </block>
           </block>
       </scroll-view>
     </swiper-item>
@@ -84,7 +82,11 @@
 
 
     <swiper-item class="swiperit">
-      <view wx:if="{{characterid!=-1}}" class="weui-article" style="height: 100%;">
+      <view wx:if="{{acquiredclue.length==0}}" class="weui-article" style="height: 100%;">
+        <view class="weui-article__h1 tx">我的线索：</view>
+        <view class="weui-article__h3 tx">暂无线索，玩家可在搜集处线索搜集。</view>
+      </view>
+      <view wx:if="{{characterid!=-1 && acquiredclue.length!=0}}" class="weui-article" style="height: 100%;">
         <view class="weui-article__h1 tx">我的线索</view>
         <swiper indicator-dots="true" vertical bindchange="swiperV" current="0" style="height: 70%; width: 103%; padding-top: 10rpx; overflow: visible;">
           <block wx:for="{{acquiredclue}}" wx:for-item="clue" wx:key="index">
@@ -117,8 +119,14 @@
     </swiper-item>
 
     <swiper-item class="swiperit">
+      <view wx:if="{{characterid==-1}}" class="weui-article" style="height: 100%;">
+        <view class="weui-article__h1 tx">主持人不能搜集线索</view>
+      </view>
+      <view wx:if="{{characterid!=-1 && roundnumber==0}}" class="weui-article" style="height: 100%;">
+        <view class="weui-article__h1 tx">本阶段不能搜集线索</view>
+      </view>
       <scroll-view wx:if="{{characterid!=-1}}" class="weui-article swipscroll" scroll-y="true">
-        <view class="weui-article__h1 tx">搜集线索</view>
+        <view class="weui-article__h1 tx">搜集线索  剩余行动点：{{actionpoint}}</view>
         <view wx:if="{{roundnumber>0}}">
           <image wx:if="{{gameinfo.mapurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.mapurl}}" bindtap="enlarge" id="-2" mode="widthFix" style="width: 98%; padding-top: 40rpx; padding-bottom: 40rpx"></image>
           <view style="display: flex; flex-direction: row; flex-wrap: wrap;">
@@ -132,7 +140,7 @@
 
     <swiper-item class="swiperit">
       <scroll-view class="weui-article swipscroll" scroll-y="true">
-        <view class="weui-article__h1 tx">游戏说明及背景</view>
+        <view class="weui-article__h1 tx">剧本说明及背景</view>
         <block>
           <block wx:for="{{gameinfo.instruction}}" wx:for-item="instruct" wx:key="index">
             <view class="tx pdt">*{{instruct.type}}</view>
@@ -167,7 +175,7 @@
             <view>
               <form bindsubmit="setactionpoint" hidden='{{hostname!=usernickname && characterid!=-1}}'>
                 <slider value="3" activeColor="orange" min="0" max="10" show-value name="point" />
-                <button class="squareB" form-type="submit"> 设置行动点 </button>
+                <button class="squareB" form-type="submit"> 发放行动点 </button>
               </form>
               <button class="squareB" bindtap='nextround' hidden='{{hostname!=usernickname && characterid!=-1}}'>进入下一回合</button>
               <block wx:if="{{vote==-1&&gameinfo.mainplot[roundnumber].plotname=='指认凶手'}}">
@@ -183,13 +191,10 @@
             </view>
 
             <view style="display: flex; flex-direction: row; width: 100%;">
-
-
               <button class="squareB" hidden="{{vote!=-1&&gameinfo.mainplot[roundnumber].plotname=='指认凶手'?false:true}}" bindtap='showresult'>查看投票</button>
-              <button class="squareB" hidden="{{hostname==usernickname&&vote!=-1&&gameinfo.mainplot[roundnumber].plotname=='指认凶手'?false:true}}" bindtap='revote'>重新投票</button>
-              <button class="squareB" bindtap='save'>保存游戏</button>
-              <button class="squareB" bindtap='clearinfo'>退出房间</button>
-
+              <button class="squareB" hidden="{{(hostname==usernickname||characterid==-1)&&vote!=-1&&gameinfo.mainplot[roundnumber].plotname=='指认凶手'?false:true}}" bindtap='revote'>重新投票</button>
+              <!--<button class="squareB" bindtap='save'>保存游戏</button>
+              <button class="squareB" bindtap='clearinfo'>退出房间</button>-->
             </view>
           </block>
         </view>

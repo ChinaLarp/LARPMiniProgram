@@ -22,6 +22,15 @@ var socketsend=function(that,message){
     data: senddata,
   })
 }
+var socketping = function (that, message) {
+  var senddata = JSON.stringify({
+    message: "ping"
+  })
+  console.log(senddata)
+  wx.sendSocketMessage({
+    data: senddata,
+  })
+}
 var databackup = function (that) {
   wx.request({
     url: backendurl + '/' + that.data.user_id,
@@ -55,7 +64,7 @@ var cleardata = function () {
     key: 'table_id'
   })
   wx.reLaunch({
-    url: '../index/index'
+    url: '../shop/shop'
   })
 }
 var socketwork = function (res) {
@@ -130,6 +139,7 @@ var tableuserinfo = function(that){
 module.exports = {
   formatTime: formatTime,
   socketsend: socketsend,
+  socketping: socketping,
   databackup: databackup,
   backendurl: backendurl,
   cleardata: cleardata,

@@ -18,6 +18,20 @@ App({
           success:function(res){
             console.log("unionid:" +res.data)
             that.globalData.unionid = res.data
+          },
+          failed: function(res){
+            console.log("unionid failed to recieve, trying again")
+            wx.request({
+              url: 'https://chinabackend.bestlarp.com/unionid?appid=' + appid + '&secret=' + secret + '&js_code=' + res.code + '&grant_type=authorization_code',
+              success: function (res) {
+                console.log("unionid:" + res.data)
+                that.globalData.unionid = res.data
+              },
+              failed: function (res) {
+                console.log("unionid failed to recieve.")
+
+              }
+            })
           }
         })
       }

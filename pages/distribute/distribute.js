@@ -198,6 +198,7 @@ Page({
       wx.request({
         url: larp.backendurl + '?type=character&gameid=' + options.gameid + '&characterid=' + options.id,
         success: function (res) {
+          console.log("char info get")
           that.setData({
             character: res.data[0],
             characterid: options.id,
@@ -213,12 +214,14 @@ Page({
             gamename: res.data[0].name,
             gameid: options.gameid
           })
+          console.log("game info get")
         }
       })
       console.log(options.tableid)
       wx.request({
         url: larp.backendurl + '?type=table&tableid=' + options.tableid,
         success: function (res) {
+          console.log("tabl info get")
           if (res.data.length == 0) {
             wx.showModal({
               title: '房间已删除',

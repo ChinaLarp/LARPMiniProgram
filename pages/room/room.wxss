@@ -115,6 +115,12 @@ page, .page {
   border-radius: 4rpx;
   overflow: hidden;
 }
+.kind-list-item-current {
+  margin: 20rpx 0;
+  background-color: rgba(255,255,255,0.6);
+  border-radius: 4rpx;
+  overflow: hidden;
+}
 .kind-list-item-hd {
   padding: 30rpx;
   display: flex;

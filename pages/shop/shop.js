@@ -88,7 +88,7 @@ Page({
     let that=this
     if(app.globalData.unionid==undefined) {
       console.log("waiting")
-      setTimeout(function () { that.waitglobal() }, 500);
+      setTimeout(function () { that.waitglobal() }, 1000);
     } else {
       //console.log(app.globalData.unionid)
       wx.request({

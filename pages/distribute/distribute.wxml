@@ -2,7 +2,7 @@
 
   <view wx:if="{{displaytype=='character'}}" class="page__bd">
     <view class="weui-article">
-      <view class="weui-article__h1">{{gamename}}</view>
+      <view class="weui-article__h1">{{gamename}}({{gameid}})</view>
       <view class="weui-article__section">
         <view class="weui-article__h3">
         {{gameinfo.descripion}}
