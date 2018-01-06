@@ -174,7 +174,7 @@
           <block>
             <view class="square">
               <form bindsubmit="broadcastSubmit">
-                <input class="notepad" maxlength="100" bindblur="bindTextAreaBlur" style="height: 40rpx;" placeholder="“公告秘密”将此填写内容广播（所有玩家可见）" value="{{broadcast}}" name="textarea" />
+                <input class="notepad" maxlength="100" bindblur="bindTextAreaBlur" style="height: 40rpx;" placeholder="“公告秘密”将此处内容广播（所有玩家可见）" value="{{broadcast}}" name="textarea" />
                 <button class="squareB" style="width: 100%;" form-type="submit"> 公告秘密 </button>
               </form>
             </view>

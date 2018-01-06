@@ -255,7 +255,15 @@ Page({
       })
       if(e.timeStamp - that.data.touchtime < 200){
         this.setData({
-          seeimage: -1
+          seeimage: -1,
+          stv: {
+            offsetX: 0,
+            offsetY: 0,
+            zoom: false, //是否缩放状态
+            distance: 0,  //两指距离
+            scale: 1,  //缩放倍数
+          }
+          
         })
       }
     }
