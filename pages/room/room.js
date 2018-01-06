@@ -33,7 +33,9 @@ Page({
     currentclue: 0,
     picksend:null,
     touchtime: 0,
-    plotopen:-1,
+    plotopen: -1,
+    infoopen: -1,
+    instopen: -1,
     //图片放缩
     stv: {
       offsetX: 0,
@@ -50,15 +52,37 @@ Page({
       icon: 'loading'
     })
   },
-  kindToggle: function(e){
-    if (this.data.plotopen == e.currentTarget.id){
+  kindToggle: function (e) {
+    if (this.data.plotopen == e.currentTarget.id) {
       this.setData({
         plotopen: -1
       });
-    }else{
-    this.setData({
-      plotopen: e.currentTarget.id
-    });
+    } else {
+      this.setData({
+        plotopen: e.currentTarget.id
+      });
+    }
+  },
+  infokindToggle: function (e) {
+    if (this.data.infoopen == e.currentTarget.id) {
+      this.setData({
+        infoopen: -1
+      });
+    } else {
+      this.setData({
+        infoopen: e.currentTarget.id
+      });
+    }
+  },
+  instkindToggle: function (e) {
+    if (this.data.instopen == e.currentTarget.id) {
+      this.setData({
+        instopen: -1
+      });
+    } else {
+      this.setData({
+        instopen: e.currentTarget.id
+      });
     }
   },
   refresh: function (e) {
@@ -243,7 +267,9 @@ Page({
     var tempuser_id
     if (this.data.characterid==this.data.picksend){
       wx.showToast({ title: '不能发给自己', icon: 'loading', duration: 1000 });
-    }else{
+    } else if (this.data.data.acquiredclue[this.data.currentclue].cluenumber == -1){
+      wx.showToast({ title: '此线索已被发出', icon: 'loading', duration: 1000 });
+    } else {
     //animation
     var animation = wx.createAnimation({
       duration: 600,
@@ -260,44 +286,47 @@ Page({
       wx.request({
         url: larp.backendurl + '?type=user&tableid=' + that.data.tableid + '&characterid=' + that.data.picksend,
         success: function (res) {
-          console.log(res.data[0])
-          tempacquiredclue = res.data[0].acquiredclue
-          tempuser_id = res.data[0]._id
-          wx.request({
-            url: larp.backendurl + '/' + tempuser_id,
-            data: {
-              acquiredclue: tempacquiredclue.concat(that.data.acquiredclue[that.data.currentclue]),
-              signature: md5.hexMD5(tempuser_id+"xiaomaomi")
-            },
-            method: 'PUT',
-            success: function (res) {
-              console.log('send complete')
-              var newacquiredclue = that.data.acquiredclue
-              newacquiredclue[that.data.currentclue] = { "content": that.data.acquiredclue[that.data.currentclue].content +"(该线索已发送给" + that.data.gameinfo.characterlist[that.data.picksend].name + ")。", "cluenumber": -1, "cluelocation": that.data.acquiredclue[that.data.currentclue].cluelocation }
-              that.setData({
-                acquiredclue: newacquiredclue
-              })
-              wx.sendSocketMessage({
-                data: JSON.stringify({
-                  table_id: that.data.table_id, message: 'sendclue', user_id: tempuser_id
-                }),
-              })
-              wx.request({
-                url: larp.backendurl + '/' + that.data.user_id,
-                data: {
-                  acquiredclue: that.data.acquiredclue,
-                  broadcast: that.data.broadcast,
-                  vote: that.data.vote,
-                  actionpoint: that.data.actionpoint,
-                  signature: md5.hexMD5(that.data.user_id + "xiaomaomi")
-                },
-                method: "PUT",
-                success: function (res) {
-                  console.log("sync succeeded")
-                },
-              });
-            }
-          });
+          if (res.data.length!=0){
+            wx.showToast({
+              title: '角色不存在',
+              duration: 2000
+            })
+          }else{
+            tempacquiredclue = res.data[0].acquiredclue
+            tempuser_id = res.data[0]._id
+            wx.request({
+              url: larp.backendurl + '/' + tempuser_id,
+              data: {
+                acquiredclue: tempacquiredclue.concat(that.data.acquiredclue[that.data.currentclue]),
+                signature: md5.hexMD5(tempuser_id + "xiaomaomi")
+              },
+              method: 'PUT',
+              success: function (res) {
+                console.log('send complete')
+                var newacquiredclue = that.data.acquiredclue
+                newacquiredclue[that.data.currentclue] = { "content": that.data.acquiredclue[that.data.currentclue].content + "(该线索已发送给" + that.data.gameinfo.characterlist[that.data.picksend].name + ")。", "cluenumber": -1, "cluelocation": that.data.acquiredclue[that.data.currentclue].cluelocation }
+                that.setData({
+                  acquiredclue: newacquiredclue
+                })
+                wx.sendSocketMessage({
+                  data: JSON.stringify({
+                    table_id: that.data.table_id, message: 'sendclue', user_id: tempuser_id
+                  }),
+                })
+                wx.request({
+                  url: larp.backendurl + '/' + that.data.user_id,
+                  data: {
+                    acquiredclue: that.data.acquiredclue,
+                    signature: md5.hexMD5(that.data.user_id + "xiaomaomi")
+                  },
+                  method: "PUT",
+                  success: function (res) {
+                    console.log("sync succeeded")
+                  },
+                });
+              }
+            });
+          }
         }
       });
       var animation = wx.createAnimation({
@@ -341,6 +370,9 @@ Page({
 
   nextround: function () {
     let that = this
+    wx.showLoading({
+      title: '进入下回合',
+    })
     wx.request({
       url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
       success: function (res) {
@@ -354,6 +386,7 @@ Page({
         if (res.data.length != that.data.gameinfo.playernumber) {
           plotname = "人数未齐！"+plotname
         }
+        wx.hideLoading()
         wx.showModal({
           title: '进入下回合',
           content:plotname,
@@ -418,10 +451,7 @@ Page({
         wx.request({
           url: larp.backendurl + '/' + that.data.user_id,
           data: {
-            acquiredclue: that.data.acquiredclue,
-            broadcast: that.data.broadcast,
             vote: that.data.pickvote,
-            actionpoint: that.data.actionpoint,
             signature: md5.hexMD5(that.data.user_id + "xiaomaomi")
           },
           method: "PUT",
@@ -484,8 +514,7 @@ Page({
           showCancel:false
         })
         that.setData({
-          acquiredclue: that.data.acquiredclue.concat(that.data.gameinfo.cluelocation[locationid].clues[cluenumber]),
-          updatetab: that.data.updatetab.slice(0, 2).concat([true]).concat(that.data.updatetab.slice(3, 6))
+          acquiredclue: that.data.acquiredclue.concat(that.data.gameinfo.cluelocation[locationid].clues[cluenumber])
         })
         wx.request({
           url: larp.backendurl + '/' + that.data.user_id,
@@ -512,7 +541,9 @@ Page({
 
     } else if (that.data.gameinfo.cluemethod == "random") {
       if (that.data.actionpoint > 0) {
-        wx.showToast({ title: '正在获取', icon: 'loading', duration: 2000 });
+        wx.showLoading({
+          title: '正在获取',
+        })
         that.setData({
           actionpoint: that.data.actionpoint - 1
         })
@@ -539,6 +570,7 @@ Page({
                   console.log(cluenumber)
                 }
               }
+              wx.hideLoading()
               wx.showModal({
                 title: '线索',
                 content: that.data.gameinfo.cluelocation[locationid].clues[cluenumber].content + '    你的剩余行动点：' + that.data.actionpoint,
@@ -552,8 +584,7 @@ Page({
               console.log("new clue status")
               console.log(that.data.cluestatus)
               that.setData({
-                acquiredclue: that.data.acquiredclue.concat(that.data.gameinfo.cluelocation[locationid].clues[cluenumber]),
-                updatetab: that.data.updatetab.slice(0, 2).concat([true]).concat(that.data.updatetab.slice(3, 6))
+                acquiredclue: that.data.acquiredclue.concat(that.data.gameinfo.cluelocation[locationid].clues[cluenumber])
               })
 
               wx.request({
@@ -568,6 +599,7 @@ Page({
                 },
               });
             } else {
+              wx.hideLoading()
               wx.showModal({
                 title: '线索',
                 content: '你毫无所获。你的剩余行动点：' + that.data.actionpoint,
@@ -578,8 +610,6 @@ Page({
               url: larp.backendurl + '/' + that.data.user_id,
               data: {
                 acquiredclue: that.data.acquiredclue,
-                broadcast: that.data.broadcast,
-                vote: that.data.vote,
                 actionpoint: that.data.actionpoint,
                 signature: md5.hexMD5(that.data.user_id + "xiaomaomi")
               },
@@ -742,6 +772,7 @@ Page({
       console.log("waiting unionid")
       setTimeout(function () { that.getsession() }, 300);
     } else {
+      if (wx.getStorageSync('tableid') && wx.getStorageSync('gameid') && wx.getStorageSync('characterid') && wx.getStorageSync('user_id') && wx.getStorageSync('table_id') ){
       that.setData({
         tableid: wx.getStorageSync('tableid'),
         gameid: wx.getStorageSync('gameid'),
@@ -750,6 +781,12 @@ Page({
         table_id: wx.getStorageSync('table_id'),
         usernickname: app.globalData.unionid
       })
+      }else{
+        wx.showModal({
+          title: '数据加载失败',
+          content: '请从人物码重新进入',
+        })
+      }
     }
     ispaused = false
   },

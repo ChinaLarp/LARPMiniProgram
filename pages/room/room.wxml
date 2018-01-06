@@ -28,12 +28,21 @@
           <view class="pdt">{{characterinfo.characterdescription}}</view>
           <view>{{characterinfo.characterbackground}}</view>
           <view wx:for="{{characterinfo.characterinfo}}">
-            <view class="tx pdt">*{{item.type}}</view>
-            <view wx:for="{{item.content}}">{{item}}</view>
+            <view class="kind-list-item">
+              <view id="{{index}}" class="kind-list-item-hd {{infoopen==index ? 'kind-list-item-hd-show' : ''}}" bindtap="infokindToggle">
+                <view class="kind-list-text">{{item.type}}</view>
+              </view>
+              <view class="kind-list-item-bd {{infoopen==index ? 'kind-list-item-bd-show' : ''}}">
+                  <block wx:for="{{item.content}}" wx:for-item="paragraph" wx:key="pindex">
+                    <view>{{paragraph}}</view>
+                  </block>
+              </view>
+            </view>
           </view>
         </block>
       </scroll-view>
     </swiper-item>
+
 
     <swiper-item class="swiperit">
       <scroll-view class="weui-article swipscroll" scroll-y="true">
@@ -143,10 +152,16 @@
         <view class="weui-article__h1 tx">剧本说明及背景</view>
         <block>
           <block wx:for="{{gameinfo.instruction}}" wx:for-item="instruct" wx:key="index">
-            <view class="tx pdt">*{{instruct.type}}</view>
-            <block wx:for="{{instruct.content}}" wx:for-item="paragraph" >
-              <view>{{paragraph}}</view>
-            </block>
+            <view class="kind-list-item">
+              <view id="{{index}}" class="kind-list-item-hd {{instopen==index ? 'kind-list-item-hd-show' : ''}}" bindtap="instkindToggle">
+                <view class="kind-list-text">{{instruct.type}}</view>
+              </view>
+              <view class="kind-list-item-bd {{instopen==index ? 'kind-list-item-bd-show' : ''}}">
+                  <block wx:for="{{instruct.content}}" wx:for-item="paragraph" wx:key="pindex">
+                    <view>{{paragraph}}</view>
+                  </block>
+              </view>
+            </view>
           </block>
         </block>
       </scroll-view>
@@ -166,8 +181,8 @@
             <view class="square" style="height: 38%;">
               <scroll-view class="notepad" style="height: 100%" scroll-y="true">
                 <block wx:for="{{globalbroadcast}}">
-                  <view hidden="{{item.characterid==-1}}" class="tx" style="margin: 5rpx; font-size:28rpx"> {{gameinfo.characterlist[item.characterid].name}} </view>
-                  <view hidden="{{item.characterid!=-1}}" class="tx" style="margin: 5rpx; font-size:28rpx"> 主持人 </view>
+                  <view hidden="{{item.characterid==-1}}" class="tx" style="margin: 5rpx; font-size:28rpx"> {{gameinfo.characterlist[item.characterid].name}}： </view>
+                  <view hidden="{{item.characterid!=-1}}" class="tx" style="margin: 5rpx; font-size:28rpx"> 主持人： </view>
                   <view style="word-break: break-all; white-space: pre-line; font-size: 26rpx;"> {{item.broadcast}} </view>
                 </block>
               </scroll-view>
