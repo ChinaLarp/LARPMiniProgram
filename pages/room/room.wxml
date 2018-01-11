@@ -131,10 +131,10 @@
       <view wx:if="{{characterid==-1}}" class="weui-article" style="height: 100%;">
         <view class="weui-article__h1 tx">主持人不能搜集线索</view>
       </view>
-      <view wx:if="{{characterid!=-1 && roundnumber==0}}" class="weui-article" style="height: 100%;">
+      <view wx:if="{{characterid!=-1 && gameinfo.mainplot[roundnumber].enableclue==0}}" class="weui-article" style="height: 100%;">
         <view class="weui-article__h1 tx">本阶段不能搜集线索</view>
       </view>
-      <scroll-view wx:if="{{characterid!=-1}}" class="weui-article swipscroll" scroll-y="true">
+      <scroll-view wx:if="{{characterid!=-1 && gameinfo.mainplot[roundnumber].enableclue>0}}" class="weui-article swipscroll" scroll-y="true">
         <view class="weui-article__h1 tx">搜集线索  剩余行动点：{{actionpoint}}</view>
         <view wx:if="{{roundnumber>0}}">
           <image wx:if="{{gameinfo.mapurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.mapurl}}" bindtap="enlarge" id="-2" mode="widthFix" style="width: 98%; padding-top: 40rpx; padding-bottom: 40rpx"></image>
@@ -193,21 +193,21 @@
                 <button class="squareB" form-type="submit"> 发放行动点 </button>
               </form>
               <button class="squareB" bindtap='nextround' hidden='{{hostname!=usernickname && characterid!=-1}}'>进入下一回合</button>
-              <block wx:if="{{vote==-1&&gameinfo.mainplot[roundnumber].plotname=='指认凶手'}}">
+              <block wx:if="{{vote==-1&&gameinfo.mainplot[roundnumber].enablevote>0}}">
                 <view style="display: flex; flex-direction: row; width: 100%; align-items: center; justify-content: space-around">
                   <picker bindchange="pickvote" range="{{gameinfo.characterlist}}" range-key="name" style="width: 50%">
                     <view class="squareB" style="background-color: gainsboro; border-radius: 20rpx;">
                       你的选择：{{gameinfo.characterlist[pickvote].name}}
                     </view>
                   </picker>
-                  <button class="squareB" hidden="{{vote==-1&&gameinfo.mainplot[roundnumber].plotname=='指认凶手'?false:true}}" style="width: 50%;" bindtap="vote"> 指认凶手 </button>
+                  <button class="squareB" hidden="{{vote==-1&&gameinfo.mainplot[roundnumber].enablevote>0?false:true}}" style="width: 50%;" bindtap="vote"> 指认凶手 </button>
                 </view>
               </block>
             </view>
 
             <view style="display: flex; flex-direction: row; width: 100%;">
-              <button class="squareB" hidden="{{vote!=-1&&gameinfo.mainplot[roundnumber].plotname=='指认凶手'?false:true}}" bindtap='showresult'>查看投票</button>
-              <button class="squareB" hidden="{{(hostname==usernickname||characterid==-1)&&vote!=-1&&gameinfo.mainplot[roundnumber].plotname=='指认凶手'?false:true}}" bindtap='revote'>重新投票</button>
+              <button class="squareB" hidden="{{vote!=-1&&gameinfo.mainplot[roundnumber].enablevote>0?false:true}}" bindtap='showresult'>查看投票</button>
+              <button class="squareB" hidden="{{(hostname==usernickname||characterid==-1)&&vote!=-1&&gameinfo.mainplot[roundnumber].enablevote>0?false:true}}" bindtap='revote'>重新投票</button>
               <!--<button class="squareB" bindtap='save'>保存游戏</button>
               <button class="squareB" bindtap='clearinfo'>退出房间</button>-->
             </view>
