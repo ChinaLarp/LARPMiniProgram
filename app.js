@@ -1,4 +1,4 @@
-//app.js
+var md5 = require('utils/md5.js')//app.js
 App({
   onLaunch: function () {
     // 展示本地存储能力
@@ -18,6 +18,27 @@ App({
           success:function(res){
             console.log("unionid:" +res.data)
             that.globalData.unionid = res.data
+            wx.request({
+              method:"POST",
+              data:{
+                openid:res.data
+              },
+              url: 'http://localhost:8080/unifiedorder',
+              success: function (res) {
+                console.log(res.data.xml.prepay_id)
+                wx.requestPayment(
+                  {
+                    'timeStamp': '1490840662',
+                    'nonceStr': '123',
+                    'package': 'prepay_id='+res.data.xml.prepay_id,
+                    'signType': 'MD5',
+                    'paySign': md5.hexMD5("appId=wxf0487d45228f02d3&nonceStr=123&package=prepay_id=" + res.data.xml.prepay_id +"&signType=MD5&timeStamp=1490840662&key=6e11af317a7a85a14b3387d5c6c71d3a").toUpperCase(),
+                    'success': function (res) {console.log("success") },
+                    'fail': function (res) { console.log("failed")},
+                    'complete': function (res) { console.log("complete" )}
+                  })
+              }
+            })
           },
           failed: function(res){
             console.log("unionid failed to recieve, trying again")

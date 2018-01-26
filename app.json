@@ -3,7 +3,8 @@
     "pages/shop/shop",
     "pages/room/room",
     "pages/create/create",
-    "pages/distribute/distribute"
+    "pages/distribute/distribute",
+    "pages/game/game"
   ],
   "window":{
     "backgroundTextStyle":"light",
