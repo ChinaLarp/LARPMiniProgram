@@ -14,13 +14,8 @@ Page({
   },
   navigate: function (e) {
     wx.showToast({ title: '敬请期待', icon: 'loading', duration: 1000 });
-    
-    //wx.navigateTo({
-      //url: '../shop/category/' + e.target.id,
-    //})
   },
   introduction: function (e) {
-    console.log(e)
     wx.navigateTo({
       url: '../game/game?gameid=' + this.data.gamelist[e.currentTarget.id]._id
     })
