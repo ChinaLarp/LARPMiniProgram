@@ -54,7 +54,7 @@
 </view>
 <scroll-view class="page" scroll-y="true">
   <block wx:for="{{gamelist}}" wx:key="index">
-    <view class="form" bindtap="introduction" id="{{item._id}}">
+    <view class="form" bindtap="introduction" id="{{index}}">
       <view class="game">
         <image class="pic" src="https://chinabackend.bestlarp.com/pic/{{item.iconurl}}" style="width: 110rpx; height: 110rpx;"></image>
         <view class="info">

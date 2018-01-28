@@ -20,8 +20,9 @@ Page({
     //})
   },
   introduction: function (e) {
+    console.log(e)
     wx.navigateTo({
-      url: '../game/game?gameid=' + e.target.id
+      url: '../game/game?gameid=' + this.data.gamelist[e.currentTarget.id]._id
     })
   },
   waitglobal:function() {
@@ -41,7 +42,7 @@ Page({
             })
           } else {
             wx.request({
-              url: larp.backendurl + '?type=game&select=id&select=_id&select=name&select=category&select=descripion&select=iconurl',
+              url: larp.backendurl + '?type=game&select=id _id name category descripion iconurl',
               success: function (res) {
                 that.setData({
                   gamelist: res.data

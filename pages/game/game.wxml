@@ -5,7 +5,7 @@
         <view class="h1">
           {{gameinfo.name}}
         </view>
-        <image src="https://chinabackend.bestlarp.com/pic/{{gameinfo.coverurl}}" ></image>
+         <image wx:if="{{gameinfo.coverurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.coverurl}}" ></image>
         <view class="h2">
           Yummy酱
         </view>
