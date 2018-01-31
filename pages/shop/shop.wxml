@@ -14,7 +14,15 @@
     </view>
   </view>
 
-    <!--
+  <view class="flex1">
+    <view bindtap= 'gamelist' class="tab-item">
+      游戏列表
+    </view>
+    <view bindtap= 'aboutus' class="tab-item">
+      关于我们
+    </view>
+  </view>
+<!--
   <view class="flex">
     <view class="tab-item">
       <image class="tab-item" bindtap="navigate" id="1" style="width: 50rpx; height: 50rpx;" src="/icon/taiji_shop.png"></image>
@@ -52,7 +60,7 @@
   </view>
 -->
 </view>
-<scroll-view class="page" scroll-y="true">
+<scroll-view wx:if="{{display==0}}" class="page" scroll-y="true">
   <block wx:for="{{gamelist}}" wx:key="index">
     <view class="form" bindtap="introduction" id="{{index}}">
       <view class="game">
@@ -71,8 +79,24 @@
       </view>
     </view>
   </block>
-
-
-
-
+</scroll-view>
+<scroll-view wx:if="{{display==1}}" class="page" scroll-y="true">
+  <block wx:for="{{gamelist}}" wx:key="index">
+    <view class="form" bindtap="introduction" id="{{index}}">
+      <view class="game">
+        <image class="pic" src="https://chinabackend.bestlarp.com/pic/{{item.iconurl}}" style="width: 110rpx; height: 110rpx;"></image>
+        <view class="info">
+          <view class="h1">
+            {{item.name}}
+          </view>
+          <view class="h2">
+            {{item.category}}
+          </view>
+          <view class="h3">
+            {{item.descripion}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
 </scroll-view>

@@ -5,7 +5,8 @@ Page({
   data: {
     background: ['1' ,'2', '3'],
     gamelist:[],
-    currentgame:{}
+    currentgame:{},
+    display:0
   },
   onPullDownRefresh: function () {
     console.log('onPullDownRefresh');
@@ -17,7 +18,17 @@ Page({
   },
   introduction: function (e) {
     wx.navigateTo({
-      url: '../game/game?gameid=' + this.data.gamelist[e.currentTarget.id]._id
+      url: '../game/game?gameid=' + this.data.gamelist[e.currentTarget.id].id
+    })
+  },
+  gamelist: function (e) {
+    this.setData({
+      display: 0
+    })
+  }, 
+  aboutus: function (e) {
+    this.setData({
+      display: 1
     })
   },
   waitglobal:function() {

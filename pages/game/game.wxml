@@ -2,41 +2,53 @@
   <view class="page__bd">
     <view class="weui-article">
       <scroll-view scroll-y="true" style="position: fixed; top: 0; width: 100%; height: 100%;">
-
-        <view style='display: flex; flex-direction: row; justify-content: space-between; width: 100%; height: 50%; padding-bottom: 40rpx'>
-          <image wx:if="{{gameinfo.coverurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.coverurl}}" style="width: 49%; height: 98%; padding-top: 60rpx; margin-bottom: 30rpx"></image>
-
-          <scroll-view scroll-y="true" class="weui-article__section" style="width: 45%; height: 120%; margin-left: 20rpx; margin-right: 50rpx">
-            <view class="head" style='display: flex; justify-content: center'>{{gameinfo.name}}</view>
-            <view class="article">
+        <view class="head" style='display: flex'>{{gameinfo.name}}
+        </view>
+        <view class="article">
               {{gameinfo.descripion}}
             </view>
+        <view style='display: flex; flex-direction: row; justify-content: space-between; width: 100%; height: 50%; padding-bottom: 40rpx'>
+          <image wx:if="{{gameinfo.coverurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.coverurl}}" style="width: 49%; height: 98%; padding-top: 20rpx; margin-bottom: 30rpx"></image>
+          <!--基础信息-->
+          <scroll-view scroll-y="true" class="weui-article__section" style="width: 45%; height: 120%; margin-left: 20rpx; margin-right: 50rpx">
+
+            <view class="article" style="font-weight: 400">适合人数：</view>
+            <view class="article">{{gameinfo.malenumber}}男；{{gameinfo.femalenumber}}女</view>
+            <view class="article" style="font-weight: 400">难度指数：</view>
+            <view class="article">暂无评分</view>
+            <view class="article" style="font-weight: 400">游戏价格：</view>
+            <view class="article">{{gameinfo.price?gameinfo.price:"免费体验"}}</view>
+            <view class="article" style="font-weight: 400">游戏介绍：</view>
             <view class="article">
-              <block wx:for="{{gameinfo.mainplot[0].content}}" wx:for-item="item">
-                <view class="article">
-                  {{item}}
-                </view>
-              </block>
+            <block wx:for="{{gameinfo.detailDescription}}" wx:for-item="item">
+              <view>
+                {{item}}
+              </view>
+            </block>
             </view>
           </scroll-view>
-
         </view>
+        
+        <!--人物信息-->
         <view class="weui-article__section" style='padding-bottom: 40rpx; padding-right: 50rpx'>
           <view class="head">人物介绍</view>
-          <block wx:for="{{gameinfo.characterlist}}" wx:for-item="item">
-            <view class="article" style="font-weight: 300;">
-              {{item.name}}
-            </view>
-            <view class="article">
-              {{item.description}}
+          <block wx:for="{{characterlist}}" wx:for-item="item">
+              <view class="article" style="font-weight: 400">
+                {{item.charactername}}({{item.charactersex}})
+              </view>
+            <view class="form">
+              <view class="article">
+                {{item.characterdescription}}
+              </view>
             </view>
           </block>
         </view>
+        <br/>
       </scroll-view>
       <view style="position: fixed; bottom: 0; left: 0; display: flex; flex-direction: row; width: 100%;">
-        <button style='width: 33.3%; height: 70rpx; font-size: 30rpx;'>解锁游戏</button>
-        <button style='width: 33.3%; height: 70rpx; font-size: 30rpx;'>创建游戏</button>
-        <button style='width: 33.3%; height: 70rpx; font-size: 30rpx;'>返回</button>
+      
+        <button wx:if='{{gameinfo.price && !purchesed}}' bindtap='unlock' style='width: 100%; height: 70rpx; font-size: 30rpx;'>解锁游戏</button>
+        <button wx:if='{{!gameinfo.price || purchesed}}' bindtap='create' style='width: 100%; height: 70rpx; font-size: 30rpx;'>创建游戏</button>
       </view>
     </view>
 

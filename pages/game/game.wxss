@@ -1,7 +1,7 @@
 @import "/pages/shop/shop.wxss";
 
 .head{
-  font-size: 28rpx; 
+  font-size: 30rpx; 
   margin-bottom:.34em;
   font-weight: 400; 
   padding-top: 30rpx;
