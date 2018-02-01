@@ -10,6 +10,13 @@
   font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
   overflow: hidden;
 }
+.article{
+  font-size: 30rpx; 
+  font-weight: 300; 
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+  padding-top: 20rpx;
+}
 
 .logo {
   position: fixed;

@@ -87,11 +87,11 @@ Page({
             gameid: res.data[0].gameid
           })
           wx.request({
-            url: larp.backendurl + '?type=game&id=' + that.data.gameid,
+            url: larp.backendurl + '?type=character&select=characterid charactername characterdescription charactersex&gameid=' + that.data.gameid,
             success: function (res) {
               wx.hideLoading()
               that.setData({
-                characterlist: res.data[0].characterlist
+                characterlist: res.data
               })
             }
           })
@@ -108,9 +108,17 @@ Page({
         url: larp.backendurl + '?type=game&id=' + options.gameid,
         success: function (res) {
           that.setData({
-            characterlist: res.data[0].characterlist,
             gamename: res.data[0].name,
             tableid: tableid
+        })
+        wx.request({
+          url: larp.backendurl + '?type=character&select=characterid charactername characterdescription charactersex&gameid=' + options.gameid,
+          success: function (res) {
+            wx.hideLoading()
+            that.setData({
+              characterlist: res.data
+            })
+          }
         })
         wx.request({
           url: larp.backendurl + '/',
@@ -157,9 +165,11 @@ Page({
         path: 'pages/distribute/distribute?tableid=' + that.data.tableid + '&gameid=' + that.data.gameid + '&type=host'
       }
     } else {
-      // 来自页面内转发按钮
+      function check(char) {
+        return char.characterid ==res.target.id;
+      }
       return {
-        title: '人物码: ' + that.data.characterlist[res.target.id].name,
+        title: '人物码: ' + that.data.characterlist.filter(check)[0].charactername,
         imageUrl: '/icon/detect_shop.png',
         path: 'pages/distribute/distribute?id=' + res.target.id + '&tableid=' + that.data.tableid + '&gameid=' + that.data.gameid + '&type=character'
       }

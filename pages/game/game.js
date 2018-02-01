@@ -12,7 +12,8 @@ Page({
     wx.request({
       method: "POST",
       data: {
-        openid: app.globalData.unionid
+        openid: app.globalData.unionid,
+        total_fee:this.data.gameinfo.price
       },
       url: 'https://chinabackend.bestlarp.com/unifiedorder',
       success: function (res) {
@@ -83,6 +84,9 @@ Page({
   },
   onLoad: function (options) {
     let that = this
+    wx.showLoading({
+      title: '加载中',
+    })
     if (options.gameid) {
       wx.request({
         url: 'https://chinabackend.bestlarp.com/api/app?type=game&id=' + options.gameid + '&select=name descripion detailDescription femalenumber malenumber price id coverurl',
@@ -101,6 +105,7 @@ Page({
             that.setData({
               characterlist: res.data,
             })
+            wx.hideLoading()
           }
         }
       })
@@ -114,6 +119,10 @@ Page({
             })
           }
         }
+      })
+    }else{
+      wx.reLaunch({
+        url: '../shop/shop',
       })
     }
   },

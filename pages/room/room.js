@@ -809,7 +809,7 @@ Page({
     this.getsession()
     if (ispaused) {
       console.log("waiting session")
-      setTimeout(function () { that.Pageload() }, 300);
+      setTimeout(function () { that.Pageload(ispaused) }, 300);
     } else {
       wx.request({
         url: larp.backendurl + '/' + that.data.table_id,
@@ -971,8 +971,6 @@ Page({
         })
       }
     }
-  },
-  onShow: function (){
     var ispaused=false
     this.Pageload(ispaused)
   },

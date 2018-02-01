@@ -2,13 +2,13 @@
   <view class="page__bd">
     <view class="weui-article">
       <scroll-view scroll-y="true" style="position: fixed; top: 0; width: 100%; height: 100%;">
-        <view class="head" style='display: flex'>{{gameinfo.name}}
+        <view class="head"  style="font-weight: 600">{{gameinfo.name}}
         </view>
         <view class="article">
               {{gameinfo.descripion}}
             </view>
         <view style='display: flex; flex-direction: row; justify-content: space-between; width: 100%; height: 50%; padding-bottom: 40rpx'>
-          <image wx:if="{{gameinfo.coverurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.coverurl}}" style="width: 49%; height: 98%; padding-top: 20rpx; margin-bottom: 30rpx"></image>
+          <image wx:if="{{gameinfo.coverurl}}" lazy-load="true" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.coverurl}}" style="width: 49%; height: 98%; padding-top: 20rpx; margin-bottom: 30rpx"></image>
           <!--基础信息-->
           <scroll-view scroll-y="true" class="weui-article__section" style="width: 45%; height: 120%; margin-left: 20rpx; margin-right: 50rpx">
 
@@ -31,16 +31,14 @@
         
         <!--人物信息-->
         <view class="weui-article__section" style='padding-bottom: 40rpx; padding-right: 50rpx'>
-          <view class="head">人物介绍</view>
+          <view class="head" style="font-weight: 600">人物介绍</view>
           <block wx:for="{{characterlist}}" wx:for-item="item">
               <view class="article" style="font-weight: 400">
                 {{item.charactername}}({{item.charactersex}})
               </view>
-            <view class="form">
-              <view class="article">
+              <view class="article" style="border-bottom: 0.1rpx double #ededed">
                 {{item.characterdescription}}
               </view>
-            </view>
           </block>
         </view>
         <br/>
