@@ -8,14 +8,6 @@ Page({
     currentgame:{},
     display:0
   },
-  onPullDownRefresh: function () {
-    console.log('onPullDownRefresh');
-    this.onShow()
-    wx.stopPullDownRefresh()
-  },
-  navigate: function (e) {
-    wx.showToast({ title: '敬请期待', icon: 'loading', duration: 1000 });
-  },
   introduction: function (e) {
     wx.navigateTo({
       url: '../game/game?gameid=' + this.data.gamelist[e.currentTarget.id].id
@@ -53,7 +45,7 @@ Page({
                 that.setData({
                   gamelist: res.data
                 })
-                wx.hideLoading()
+                wx.hideToast()
               },
             });
           }
@@ -64,8 +56,9 @@ Page({
   },
   onShow: function (e) {
     let that = this
-    wx.showLoading({
+    wx.showToast({
       title: '获取游戏列表',
+      icon:"loading"
     })
     this.waitglobal()
   }

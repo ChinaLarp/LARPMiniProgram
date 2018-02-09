@@ -88,13 +88,14 @@ Page({
   refresh: function (e) {
     let that = this
     if (that.data.table_id) {
-      wx.showLoading({
+      wx.showToast({
         title: '获取房间信息',
+        icon: "loading"
       })
       wx.request({
         url: larp.backendurl + '/' + that.data.table_id,
         success: function (res) {
-          wx.hideLoading()
+          wx.hideToast()
           if (res.statusCode == 404) {
             wx.showModal({
               title: '房间不存在',
@@ -127,8 +128,9 @@ Page({
       })
     }
     if (that.data.user_id) {
-      wx.showLoading({
+      wx.showToast({
         title: '获取玩家信息',
+        icon: "loading"
       })
       wx.request({
         url: larp.backendurl + '/' + that.data.user_id,
@@ -139,7 +141,7 @@ Page({
             vote: res.data.vote,
             actionpoint: res.data.actionpoint
           })
-          wx.hideLoading()
+          wx.hideToast()
         },
       });
     }
@@ -378,8 +380,9 @@ Page({
 
   nextround: function () {
     let that = this
-    wx.showLoading({
+    wx.showToast({
       title: '进入下回合',
+      icon: "loading"
     })
     wx.request({
       url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
@@ -394,14 +397,15 @@ Page({
         if (res.data.length != that.data.gameinfo.playernumber) {
           plotname = "人数未齐！"+plotname
         }
-        wx.hideLoading()
+        wx.hideToast()
         wx.showModal({
           title: '进入下回合',
           content:plotname,
           success: function (res) {
             if (end && res.confirm){
-              wx.showLoading({
+              wx.showToast({
                 title: '正在删除房间',
+                icon: "loading"
               })
               var user
               wx.request({
@@ -415,7 +419,7 @@ Page({
                   wx.reLaunch({
                     url: '../shop/shop'
                   })
-                  wx.hideLoading()
+                  wx.hideToast()
                 }
               })
               wx.request({
@@ -549,8 +553,9 @@ Page({
 
     } else if (that.data.gameinfo.cluemethod == "random") {
       if (that.data.actionpoint > 0) {
-        wx.showLoading({
+        wx.showToast({
           title: '正在获取',
+          icon: "loading"
         })
         that.setData({
           actionpoint: that.data.actionpoint - 1
@@ -578,7 +583,7 @@ Page({
                   console.log(cluenumber)
                 }
               }
-              wx.hideLoading()
+              wx.hideToast()
               wx.showModal({
                 title: '线索',
                 content: that.data.gameinfo.cluelocation[locationid].clues[cluenumber].content + '    你的剩余行动点：' + that.data.actionpoint,
@@ -607,7 +612,7 @@ Page({
                 },
               });
             } else {
-              wx.hideLoading()
+              wx.hideToast()
               wx.showModal({
                 title: '线索',
                 content: '你毫无所获。你的剩余行动点：' + that.data.actionpoint,
@@ -859,7 +864,7 @@ Page({
             gameinfo: res.data[0],
             cluestatus: res.data[0].cluestatus
           })
-          wx.hideLoading()
+          wx.hideToast()
         },
         complete: function () {
           wx.request({
@@ -948,8 +953,9 @@ Page({
         }
       })
       wx.onSocketClose(function (res) {
-        wx.showLoading({
-          title: '断线重连'
+        wx.showToast({
+          title: '断线重连',
+          icon: "loading"
         })
         wx.connectSocket({
           url: 'wss://chinabackend.bestlarp.com',
@@ -961,8 +967,9 @@ Page({
     let that = this
     var content = ''
     var cast
-    wx.showLoading({
+    wx.showToast({
       title: '正在加载数据',
+      icon: "loading"
     })
     if (options) {
       if (options.firsttime == 0) {

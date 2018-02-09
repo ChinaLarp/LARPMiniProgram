@@ -34,8 +34,9 @@ Page({
   },
   create: function () {
     let that = this
-    wx.showLoading({
+    wx.showToast({
       title: '正在创建房间',
+      icon: "loading"
     })
     wx.request({
       url: larp.backendurl + '?type=table&hostid=' + app.globalData.unionid,
@@ -79,13 +80,14 @@ Page({
     wx.navigateTo({
       url: '../create/create?gameid=' + this.data.gameinfo.id
     })
-    wx.hideLoading()
+    wx.hideToast()
 
   },
   onLoad: function (options) {
     let that = this
-    wx.showLoading({
+    wx.showToast({
       title: '加载中',
+      icon: "loading"
     })
     if (options.gameid) {
       wx.request({
@@ -105,7 +107,7 @@ Page({
             that.setData({
               characterlist: res.data,
             })
-            wx.hideLoading()
+            wx.hideToast()
           }
         }
       })

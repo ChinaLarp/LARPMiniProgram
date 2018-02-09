@@ -83,6 +83,9 @@
 <scroll-view hidden="{{display!=1}}" class="page" scroll-y="true">
 <view class="article">此app为替代真人推理游戏（类似明星大侦探）主持人的游戏助手，需要玩家面对面进行游戏。我们除了会提供一些经典的剧本外，还有我们才华横溢的yummy小姐姐独家编辑的剧本。每一款都体验爆表。</view>
   <view class="article">我们将来还会推出创作游戏剧本的平台（内测中），让每一个人都可能写出自己的推理剧本。由于精力有限，有好多功能还在完善中。如果您对小程序有哪些建议，期待或者问题，请通过关注我们的公众号反馈给我们。我们也会将我们的更新公布到公众号内。</view>
-  <view class="article" style="font-size:45rpx">微信搜索<text style="color:red">“全民侦探社”</text>关注我们。</view>
-  <view class="article" style="font-size:45rpx">你的支持将是我们前进的动力！</view>
+  <view class="article" style="font-size:40rpx;font-weight: 400">微信搜索<text style="color:red">“全民侦探社”</text>关注我们。</view>
+  <view class="article" style="font-size:40rpx;font-weight: 400">你的支持将是我们前进的动力！</view>
+  
+<view class="article" style="font-size:35rpx;font-weight: 400">更新（2/9/2018）：</view>
+<view class="article" style="font-size:35rpx">更新了兼容处理（有小伙伴反应加载不出游戏列表，有一些是其他原因，还在调查中）</view>
 </scroll-view>

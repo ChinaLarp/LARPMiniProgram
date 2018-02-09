@@ -23,8 +23,9 @@ Page({
   },
 
   deleteroom: function (e) {
-    wx.showLoading({
+    wx.showToast({
       title: '正在删除房间',
+      icon: "loading"
     })
     var that=this
     var user
@@ -43,7 +44,7 @@ Page({
             wx.reLaunch({
               url: '../shop/shop'
             })
-            wx.hideLoading()
+            wx.hideToast()
           }
         })
         }
@@ -69,8 +70,9 @@ Page({
   },
 
   onLoad: function (options) {
-    wx.showLoading({
+    wx.showToast({
       title: '正在加载信息',
+      icon: "loading"
     })
     wx.hideShareMenu()
     let that = this
@@ -89,7 +91,7 @@ Page({
           wx.request({
             url: larp.backendurl + '?type=character&select=characterid charactername characterdescription charactersex&gameid=' + that.data.gameid,
             success: function (res) {
-              wx.hideLoading()
+              wx.hideToast()
               that.setData({
                 characterlist: res.data
               })
@@ -114,7 +116,7 @@ Page({
         wx.request({
           url: larp.backendurl + '?type=character&select=characterid charactername characterdescription charactersex&gameid=' + options.gameid,
           success: function (res) {
-            wx.hideLoading()
+            wx.hideToast()
             that.setData({
               characterlist: res.data
             })
@@ -136,7 +138,7 @@ Page({
           },
           method: "POST",
           success: function (res) {
-            wx.hideLoading()
+            wx.hideToast()
           },
         });
       },

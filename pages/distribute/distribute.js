@@ -119,8 +119,9 @@ Page({
   onLoad: function (options) {
     let that = this
     wx.hideShareMenu({})
-    wx.showLoading({
+    wx.showToast({
       title: '加载中',
+      icon: "loading"
     })
     if(options.type=='table'){
       this.setData({
@@ -142,7 +143,7 @@ Page({
             gameinfo: res.data[0],
             gamename:res.data[0].name
           })
-          wx.hideLoading()
+          wx.hideToast()
         }
       })
 
@@ -185,7 +186,7 @@ Page({
               table_id: res.data[0]._id
             })
           }
-          wx.hideLoading()
+          wx.hideToast()
         }
       })
 
@@ -231,7 +232,7 @@ Page({
               table_id: res.data[0]._id
             })
           }
-          wx.hideLoading()
+          wx.hideToast()
         }
       })
 
