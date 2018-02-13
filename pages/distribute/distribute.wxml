@@ -23,7 +23,7 @@
         <view wx:if="{{displaytype=='host'}}" class="weui-article__h1">
           你是主持人:主持人不参与游戏，但可以以第三视角控制游戏流程。
         </view> 
-        <button wx:if="{{table_id==undefined && displaytype=='host'}}" bindtap="enterroom">主持人入口</button>
+        <button wx:if="{{displaytype=='host'}}" bindtap="enterroom">主持人入口</button>
       <view class="weui-article__section">
         <view class="weui-article__h3">
         </view>

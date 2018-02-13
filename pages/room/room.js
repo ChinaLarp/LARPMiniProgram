@@ -852,9 +852,11 @@ Page({
       wx.request({
         url: larp.backendurl + '?type=character&gameid=' + that.data.gameid + '&characterid=' + that.data.characterid,
         success: function (res) {
-          that.setData({
-            characterinfo: res.data[0]
-          })
+          if (res.data.length>0){
+            that.setData({
+              characterinfo: res.data[0]
+            })
+          }
         },
       });
       wx.request({
@@ -967,6 +969,7 @@ Page({
     let that = this
     var content = ''
     var cast
+    console.log("Loading page")
     wx.showToast({
       title: '正在加载数据',
       icon: "loading"
