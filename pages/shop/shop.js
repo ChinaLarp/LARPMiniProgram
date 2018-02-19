@@ -4,8 +4,6 @@ const app = getApp()
 Page({
   data: {
     background: ['1' ,'2', '3'],
-    gamelist:[],
-    currentgame:{},
     display:0
   },
   introduction: function (e) {
@@ -33,7 +31,6 @@ Page({
       wx.request({
         url: larp.backendurl + '?type=table&hostid=' + app.globalData.unionid,
         success: function (res) {
-          console.log(res.data)
           if (res.data.length != 0) {
             wx.navigateTo({
               url: '../create/create?tableid=' + res.data[0].tableid

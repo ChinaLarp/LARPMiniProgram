@@ -61,10 +61,10 @@
 -->
 </view>
 <scroll-view hidden="{{display!=0}}" class="page" scroll-y="true">
-  <block wx:for="{{gamelist}}" wx:for-item="game" wx:for-index="id" wx:key="*this">
+  <block wx:for="{{gamelist}}" wx:for-item="game" wx:for-index="id">
     <view class="game" bindtap="introduction" id="{{id}}">
         <image class="pic" src="https://chinabackend.bestlarp.com/pic/{{game.iconurl}}" style="width: 110rpx; height: 110rpx;"></image>
-        <view >
+        <view>
           <view class="h1">
             {{game.name}}
           </view>

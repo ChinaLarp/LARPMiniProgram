@@ -1,7 +1,7 @@
 <!--index.wxml-->
 <view class="page" style="overflow: hidden;">
   <!--全屏图片-->
-  <block wx:for="{{acquiredclue}}" wx:for-item="clue" wx:key="index" style="justify-content: center; align-items: center">
+  <block wx:for="{{acquiredclue}}" wx:for-item="clue" wx:for-index="index" style="justify-content: center; align-items: center">
     <view id="{{index}}" hidden="{{seeimage!=index}}" style="height:100%; width:100%; background: black;">
       <image catchtouchstart="touchstartCallback" catchtouchmove="touchmoveCallback" catchtouchend="touchendCallback" style="transform:translate({{stv.offsetX}}px, {{stv.offsetY}}px) scale({{stv.scale}}); " mode="widthFix" wx:if="{{clue.image}}" src="https://chinabackend.bestlarp.com/pic/{{clue.image}}">
       </image>
@@ -33,7 +33,7 @@
                 <view class="kind-list-text">{{item.type}}</view>
               </view>
               <view class="kind-list-item-bd {{infoopen==index ? 'kind-list-item-bd-show' : ''}}">
-                  <block wx:for="{{item.content}}" wx:for-item="paragraph" wx:key="pindex">
+                  <block wx:for="{{item.content}}" wx:for-item="paragraph" wx:for-index="pindex">
                     <view>{{paragraph}}</view>
                   </block>
               </view>
@@ -53,21 +53,21 @@
     <swiper-item class="swiperit">
       <scroll-view class="weui-article swipscroll" scroll-y="true">
         <view class="weui-article__h1 tx">剧本信息：</view>
-          <block wx:for="{{gameinfo.mainplot}}" wx:for-item="plot" wx:key="index">
+          <block wx:for="{{gameinfo.mainplot}}" wx:for-item="plot" wx:for-index="index">
               <view class="kind-list-item{{plot.plotid==roundnumber ? '-current ' : ''}}">
                 <view id="{{index}}" class="kind-list-item-hd {{plotopen==index ? 'kind-list-item-hd-show' : ''}}" bindtap="{{plot.plotid<=roundnumber||characterid==-1 ? 'kindToggle' : 'diskindToggle'}}">
                   <view class="kind-list-text">{{plot.plotname}}</view>
                 </view>
                 <view class="kind-list-item-bd {{plotopen==index ? 'kind-list-item-bd-show' : ''}}">
                   <view class="weui-article__h2 tx pdt">*公开信息</view>
-                    <block wx:for="{{plot.content}}" wx:for-item="paragraph" wx:key="pindex">
+                    <block wx:for="{{plot.content}}" wx:for-item="paragraph" wx:for-index="pindex">
                       <view>{{paragraph}}</view>
                     </block>
                     <block wx:if="{{characterinfo.characterplot[0].content[0].content}}">
                       <view class="weui-article__h2 tx pdt">*个人信息</view>
-                      <block wx:for="{{characterinfo.characterplot[index].content}}" wx:for-item="charactercontent" wx:key="cindex">
+                      <block wx:for="{{characterinfo.characterplot[index].content}}" wx:for-item="charactercontent" wx:for-index="cindex">
                         <view class="weui-article__h3 tx pdt">{{charactercontent.type}}</view>
-                        <block wx:for="{{charactercontent.content}}" wx:for-item="characterpara" wx:key="cpindex">
+                        <block wx:for="{{charactercontent.content}}" wx:for-item="characterpara" wx:for-index="cpindex">
                           <view>{{characterpara}}</view>
                         </block>
                       </block>
@@ -81,14 +81,14 @@
 
                 <view class="weui-article__h1 tx">{{plot.plotname}}</view>
                 <view class="tx pdt">*公开信息</view>
-                <block wx:for="{{plot.content}}" wx:for-item="paragraph" wx:key="pindex">
+                <block wx:for="{{plot.content}}" wx:for-item="paragraph" wx:for-index="pindex">
                   <view>{{paragraph}}</view>
                 </block>
                 <block wx:if="{{characterinfo.characterplot[0].content[0].content}}">
                   <view class="tx pdt">*个人信息</view>
-                  <block wx:for="{{characterinfo.characterplot[index].content}}" wx:for-item="charactercontent" wx:key="cindex">
+                  <block wx:for="{{characterinfo.characterplot[index].content}}" wx:for-item="charactercontent" wx:for-index="cindex">
                     <view class="tx pdt">{{charactercontent.type}}</view>
-                    <block wx:for="{{charactercontent.content}}" wx:for-item="characterpara" wx:key="cpindex">
+                    <block wx:for="{{charactercontent.content}}" wx:for-item="characterpara" wx:for-index="cpindex">
                       <view>{{characterpara}}</view>
                     </block>
                   </block>
@@ -104,7 +104,7 @@
       <view wx:if="{{characterid!=-1 && acquiredclue.length!=0}}" class="weui-article" style="height: 100%;">
         <view class="weui-article__h1 tx">我的线索</view>
         <swiper indicator-dots="true" vertical bindchange="swiperV" current="0" style="height: 70%; width: 103%; padding-top: 10rpx; overflow: visible;">
-          <block wx:for="{{acquiredclue}}" wx:for-item="clue" wx:key="index">
+          <block wx:for="{{acquiredclue}}" wx:for-item="clue" wx:for-index="index">
             <swiper-item>
               <view class="article" style="height: 100%; overflow: visible;">
                 <view class="weui-article__h3" style="text-decoration: underline;">{{gameinfo.cluelocation[clue.cluelocation].name}}:</view>
@@ -138,7 +138,7 @@
         <view class="weui-article__h1 tx">主持人可浏览所有线索</view>
         <swiper indicator-dots="true" vertical bindchange="swiperV" current="0" style="height: 70%; width: 103%; padding-top: 10rpx; overflow: visible;">
           <block wx:for="{{gameinfo.cluelocation}}" wx:for-item="cluelocation">
-          <block wx:for="{{cluelocation.clues}}" wx:for-item="clue" wx:key="index">
+          <block wx:for="{{cluelocation.clues}}" wx:for-item="clue" wx:for-index="index">
             <swiper-item>
               <view class="article" style="height: 100%; overflow: visible;">
                 <view class="weui-article__h3" style="text-decoration: underline;">{{cluelocation.name}}:</view>
@@ -166,7 +166,7 @@
         <view >
           <image wx:if="{{gameinfo.mapurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.mapurl}}" bindtap="enlarge" id="-2" mode="widthFix" style="width: 98%; padding-top: 40rpx; padding-bottom: 40rpx"></image>
           <view style="display: flex; flex-direction: row; flex-wrap: wrap;">
-            <block wx:for="{{gameinfo.cluelocation}}" wx:for-item="location" wx:key="index">
+            <block wx:for="{{gameinfo.cluelocation}}" wx:for-item="location" wx:for-index="index">
               <button wx:if="{{location.index!=characterinfo.banlocation}}" class="squareB" style="width: 40%;" bindtap='getclue' id='{{location.index}}'>{{location.name}}</button>
             </block>
           </view>
@@ -178,13 +178,13 @@
       <scroll-view class="weui-article swipscroll" scroll-y="true">
         <view class="weui-article__h1 tx">剧本说明及背景</view>
         <block>
-          <block wx:for="{{gameinfo.instruction}}" wx:for-item="instruct" wx:key="index">
+          <block wx:for="{{gameinfo.instruction}}" wx:for-item="instruct" wx:for-index="index">
             <view class="kind-list-item">
               <view id="{{index}}" class="kind-list-item-hd {{instopen==index ? 'kind-list-item-hd-show' : ''}}" bindtap="instkindToggle">
                 <view class="kind-list-text">{{instruct.type}}</view>
               </view>
               <view class="kind-list-item-bd {{instopen==index ? 'kind-list-item-bd-show' : ''}}">
-                  <block wx:for="{{instruct.content}}" wx:for-item="paragraph" wx:key="pindex">
+                  <block wx:for="{{instruct.content}}" wx:for-item="paragraph" wx:for-index="pindex">
                     <view>{{paragraph}}</view>
                   </block>
               </view>
@@ -271,7 +271,7 @@
 </view>
 <!--tutorial-->
 <view class="cover" hidden="{{currenttutorial==-1||currenttutorial==6}}">
-  <block wx:for="{{tutorial}}" wx:key="index">
+  <block wx:for="{{tutorial}}" wx:for-index="index">
     <image class="a" src="{{item}}" id="{{index}}" hidden="{{currenttutorial!=index}}" bindtap="nexttutorial" mode="widthFix"></image>
   </block>
 </view>
