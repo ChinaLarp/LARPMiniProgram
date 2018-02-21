@@ -89,7 +89,7 @@ Page({
             gameid: res.data[0].gameid
           })
           wx.request({
-            url: larp.backendurl + '?type=character&select=characterid charactername characterdescription charactersex&gameid=' + that.data.gameid,
+            url: larp.backendurl + '?type=character&select=characterid&select=charactername&select=characterdescription&select=charactersex&gameid=' + that.data.gameid,
             success: function (res) {
               wx.hideToast()
               that.setData({
@@ -114,7 +114,7 @@ Page({
             tableid: tableid
         })
         wx.request({
-          url: larp.backendurl + '?type=character&select=characterid charactername characterdescription charactersex&gameid=' + options.gameid,
+          url: larp.backendurl + '?type=character&select=characterid&select=charactername&select=characterdescription&select=charactersex&gameid=' + options.gameid,
           success: function (res) {
             wx.hideToast()
             that.setData({

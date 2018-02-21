@@ -488,7 +488,7 @@ Page({
     var vote
     let that = this
     wx.request({
-      url: larp.backendurl + '?type=user&tableid=' + that.data.tableid + '&select=characterid vote',
+      url: larp.backendurl + '?type=user&tableid=' + that.data.tableid + '&select=characterid&select=vote',
       success: function (res) {
         that.setData({
           voteresult: res.data
@@ -659,17 +659,19 @@ Page({
     })
     wx.request({
       url: larp.backendurl + '?type=user&select=characterid&select=broadcast&tableid=' + that.data.tableid,
+      method: "GET",
       success: function (res) {
+        function mapfunction(obj){
+          if (obj.characterid == that.data.characterid) {
+            return { characterid: that.data.characterid, broadcast: e.detail.value.textarea }
+          }
+          return obj
+        }
+        var newglobalcast = res.data.map(mapfunction)
         wx.request({
           url: larp.backendurl + '/' + that.data.table_id,
           data: {
-            globalbroadcast: res.data.map(function (obj) {
-              if (obj.characterid == that.data.characterid) {
-                return { ...obj, broadcast: e.detail.value.textarea }
-              } else {
-                return obj
-              }
-            }),
+            globalbroadcast: newglobalcast,
             signature: md5.hexMD5(that.data.table_id + "xiaomaomi")
           },
           method: "PUT",
@@ -679,13 +681,7 @@ Page({
           }
         });
         that.setData({
-          globalbroadcast: res.data.map(function (obj) { 
-            if (obj.characterid == that.data.characterid) { 
-              return { ...obj, broadcast: e.detail.value.textarea}
-            }else{
-              return obj
-            }
-          })
+          globalbroadcast: newglobalcast
         })
         wx.request({
           url: larp.backendurl + '/' + that.data.user_id,

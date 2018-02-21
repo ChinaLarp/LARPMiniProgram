@@ -37,7 +37,7 @@ Page({
             })
           } else {
             wx.request({
-              url: larp.backendurl + '?type=game&select=id _id name category descripion iconurl',
+              url: larp.backendurl + '?type=game&select=id&select=_id&select=name&select=category&select=descripion&select=iconurl',
               success: function (res) {
                 that.setData({
                   gamelist: res.data

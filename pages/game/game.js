@@ -91,7 +91,7 @@ Page({
     })
     if (options.gameid) {
       wx.request({
-        url: 'https://chinabackend.bestlarp.com/api/app?type=game&id=' + options.gameid + '&select=name descripion detailDescription femalenumber malenumber price id coverurl',
+        url: 'https://chinabackend.bestlarp.com/api/app?type=game&id=' + options.gameid + '&select=name&select=descripion&select=detailDescription&select=femalenumber&select=malenumber&select=price&select=id&select=coverurl',
         success: function (res) {
           if (res.data.length != 0) {
             that.setData({
@@ -101,7 +101,7 @@ Page({
         }
       })
       wx.request({
-        url: 'https://chinabackend.bestlarp.com/api/app?type=character&gameid=' + options.gameid + '&select=charactername characterdescription charactersex',
+        url: 'https://chinabackend.bestlarp.com/api/app?type=character&gameid=' + options.gameid + '&select=charactername&select=characterdescription&select=charactersex',
         success: function (res) {
           if (res.data.length != 0) {
             that.setData({
