@@ -10,7 +10,6 @@
           <view>1. 一局游戏仅需一位玩家创建房间，并发送给其他人进入房间的链接（人物码）。</view>
           <view>2. 房间创建者必须参与游戏，并负责控制游戏进程（游戏内控制）。</view>
           <view>3. 请通过链接进入游戏房间。</view>
-          <view>4. 重复创建房间会删除之前创建的房间。</view>
         </view>
         
         <view style="border-top: 2rpx double black;padding-bottom:20px"></view>
@@ -19,7 +18,7 @@
           <button class="ppl" size="mini" open-type="share" id="info">游戏简介</button>
         </view>
         <view style="border-top: 2rpx double black;padding-bottom:20px"></view>
-        <view class="h3">第二步：点击人物名称转发人物码至玩家</view>
+        <view class="h3">第二步：点击人物名称转发人物码至对应玩家</view>
         <block wx:for="{{characterlist}}" wx:for-item="item">
 
           <view style=" border-top: 0.1rpx double #ededed; padding-top:10px">

@@ -31,7 +31,7 @@ page, .page {
 }
 
 .swiper-tab {
-  padding-top: 28rpx;
+  padding-top: 10rpx;
   display: flex;
   flex-direction: row;
   line-height: 80rpx;
@@ -42,8 +42,10 @@ page, .page {
 }
 
 .tab-item {
+  display: fixed;
   width: 100%;
   text-align: center;
+  padding:0%;
 }
 
 .swiper {

@@ -61,7 +61,7 @@ App({
                             fail: function(res) {},
                             complete: function(res) {},
                           })
-                        } else if (Number(res.SDKVersion.split(".")[1]) <8){
+                        } else if (Number(res.SDKVersion.split(".")[1]) <5){
                           wx.showModal({
                             title: '版本更新',
                             content: '检测到您的微信不是最新版本， 这有可能导致一些功能不可用。建议先更新。',

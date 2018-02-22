@@ -2,18 +2,18 @@
 
   <view wx:if="{{displaytype=='character'}}" class="page__bd">
     <view class="weui-article">
-      <view class="weui-article__h1" style="font-weight: 500">{{gamename}}({{gameid}})</view>
+      <view class="weui-article__h1" style="font-weight: 500">{{gamename}}({{tableid}})</view>
       <view class="weui-article__section">
         <view class="weui-article__h3">
         {{gameinfo.descripion}}
         </view>
-        <view class="weui-article__title" style="border-bottom: 0.1rpx double #ededed; padding-bottom: 15rpx; padding-top: 15rpx;"></view>
+        <view class="weui-article__title" style=" padding-bottom: 15rpx; padding-top: 15rpx;"></view>
         <view class="weui-article__h3" style="font-weight: 300">你的角色：{{character.charactername}}</view>
         <view class="weui-article__h3" style="font-weight: 300">角色介绍：</view>
           <view class="weui-article__p" style="font-weight: 300">
             {{character.characterdescription}}
           </view>
-        <button hidden="{{table_id==undefined}}" bindtap="enterroom">进入房间</button>
+        <button hidden="{{table_id==undefined}}" type="primary" bindtap="enterroom">进入房间</button>
       </view>
     </view>
   </view>
@@ -23,7 +23,7 @@
         <view wx:if="{{displaytype=='host'}}" class="weui-article__h1">
           你是主持人:主持人不参与游戏，但可以以第三视角控制游戏流程。
         </view> 
-        <button wx:if="{{displaytype=='host'}}" bindtap="enterroom">主持人入口</button>
+        <button wx:if="{{displaytype=='host'}}" type="primary" bindtap="enterroom">主持人入口</button>
       <view class="weui-article__section">
         <view class="weui-article__h3">
         </view>

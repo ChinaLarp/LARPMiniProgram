@@ -10,9 +10,6 @@ function makerd() {
   return text;
 };
 Page({
-  /*
-   * 页面的初始数据
-   */
   data: {
     gameid: '',
     gamename: '',
@@ -22,7 +19,7 @@ Page({
     characterlist:[]
   },
 
-  deleteroom: function (e) {
+  deleteroom: function () {
     wx.showToast({
       title: '正在删除房间',
       icon: "loading"
@@ -176,5 +173,47 @@ Page({
         path: 'pages/distribute/distribute?id=' + res.target.id + '&tableid=' + that.data.tableid + '&gameid=' + that.data.gameid + '&type=character'
       }
     }
-}
+  },
+  onUnload: function(){
+    wx.showToast({
+      title: '正在删除房间',
+      icon: "loading"
+    })
+    var that = this
+    var user
+    wx.request({
+      url: larp.backendurl + '?type=table&tableid=' + that.data.tableid,
+      success: function (res) {
+        if (res.data.length != 0) {
+          wx.request({
+            url: larp.backendurl + '/' + res.data[0]._id,
+            method: 'DELETE',
+            data: {
+              signature: md5.hexMD5(res.data[0]._id + "xiaomaomi")
+            },
+            complete: function () {
+              wx.hideToast()
+            }
+          })
+        }
+      }
+    })
+    wx.request({
+      url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
+      success: function (res) {
+        console.log(res.data)
+        for (user in res.data) {
+          wx.request({
+            url: larp.backendurl + '/' + res.data[user]._id,
+            data: {
+              signature: md5.hexMD5(res.data[user]._id + "xiaomaomi")
+            },
+            method: 'DELETE',
+            success: function () {
+            },
+          })
+        }
+      },
+    })
+  }
 })
