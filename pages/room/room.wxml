@@ -249,27 +249,27 @@
   <view class="swiper-tab" hidden="{{seeimage!=-1}}">
     <view class="tab-item">
       <image class="tab-item {{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="navigate" id="1" style="width: 25px; height: 25px;" src="/icon/user_nav.png"></image>
-      <cover-view style="font-weight: 300; font-size:12px; margin-top:-10px; padding-top:-10px;height: 25px;">我的信息</cover-view>
+      <cover-view style="font-weight: 300; font-size:25rpx; margin-top:-10px; padding-top:-10px;height: 28rpx;">我的信息</cover-view>
     </view>
     <view class="tab-item">
       <image class="tab-item {{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="navigate" id="2" style="width: 25px; height: 25px;" src="/icon/list_nav.png"></image>
-      <cover-view style="font-weight: 300; font-size:12px; margin-top:-10px; padding-top:-10px;height: 25px;">剧本信息</cover-view>
+      <cover-view style="font-weight: 300; font-size:25rpx; margin-top:-10px; padding-top:-10px;height: 28rpx;">剧本信息</cover-view>
     </view>
     <view class="tab-item">
       <image class="tab-item {{currentTab==2 ? 'on' : ''}}" data-current="2" bindtap="navigate" id="3" style="width: 25px; height: 25px;" src="/icon/env_nav.png"></image>
-      <cover-view style="font-weight: 300; font-size:12px; margin-top:-10px; padding-top:-10px;height: 25px;">我的线索</cover-view>
+      <cover-view style="font-weight: 300; font-size:25rpx; margin-top:-10px; padding-top:-10px;height: 28rpx;">我的线索</cover-view>
     </view>
     <view class="tab-item">
       <image class="tab-item {{currentTab==3 ? 'on' : ''}}" data-current="3" bindtap="navigate" id="4" style="width: 25px; height: 25px;" src="/icon/search_nav.png"></image>
-      <cover-view style="font-weight: 300; font-size:12px; margin-top:-10px; padding-top:-10px;height: 25px;">进行搜证</cover-view>
+      <cover-view style="font-weight: 300; font-size:25rpx; margin-top:-10px; padding-top:-10px;height: 28rpx;">进行搜证</cover-view>
     </view>
     <view class="tab-item">
       <image class="tab-item {{currentTab==4 ? 'on' : ''}}" data-current="4" bindtap="navigate" id="5" style="width: 25px; height: 25px;" src="/icon/ques_nav.png"></image>
-      <cover-view style="font-weight: 300; font-size:12px; margin-top:-10px; padding-top:-10px;height: 25px;">剧本说明</cover-view>
+      <cover-view style="font-weight: 300; font-size:25rpx; margin-top:-10px; padding-top:-10px;height: 28rpx;">剧本说明</cover-view>
     </view>
     <view class="tab-item">
       <image class="tab-item {{currentTab==5 ? 'on' : ''}}" data-current="5" bindtap="navigate" id="6" style="width: 25px; height: 25px;" src="/icon/set_nav.png"></image>
-      <cover-view style="font-weight: 300; font-size:12px; margin-top:-10px; padding-top:-10px;height: 25px;">控制台</cover-view>
+      <cover-view style="font-weight: 300; font-size:25rpx; margin-top:-10px; padding-top:-10px;height: 28rpx;">控制台</cover-view>
     </view>
   </view>
 </view>

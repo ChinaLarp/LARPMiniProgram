@@ -62,11 +62,11 @@
 </view>
 <scroll-view hidden="{{display!=0}}" class="page" scroll-y="true">
   <block wx:for="{{gamelist}}" wx:for-item="game" wx:for-index="id">
-    <view class="game" bindtap="introduction" id="{{id}}">
+    <view class="game {{createdgame==game.id?'created':''}}" bindtap="{{createdgame==game.id?'entercreatedgame':'introduction'}}" id="{{id}}">
         <image class="pic" src="https://chinabackend.bestlarp.com/pic/{{game.iconurl}}" style="width: 110rpx; height: 110rpx;"></image>
         <view>
           <view class="h1">
-            {{game.name}}
+            {{game.name}}{{createdgame==game.id?'（已创建）':''}}
           </view>
           <view class="h2">
             {{game.category}}
@@ -84,6 +84,7 @@
   <view class="article" style="font-size:40rpx;font-weight: 400">微信搜索<text style="color:red">“全民侦探社”</text>关注我们。</view>
   <view class="article" style="font-size:40rpx;font-weight: 400">你的支持将是我们前进的动力！</view>
   
-<view class="article" style="font-size:35rpx;font-weight: 400">更新（2/9/2018）：</view>
-<view class="article" style="font-size:35rpx">更新了兼容处理（有小伙伴反应加载不出游戏列表，有一些是其他原因，还在调查中）</view>
+<view class="article" style="font-size:35rpx;font-weight: 400">更新（2/22/2018）：</view>
+<view class="article" style="font-size:35rpx">界面优化</view>
+<view class="article" style="font-size:35rpx">安卓6.0一下版本的兼容</view>
 </scroll-view>

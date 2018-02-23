@@ -38,53 +38,77 @@ Page({
       title: '正在创建房间',
       icon: "loading"
     })
-    wx.request({
-      url: larp.backendurl + '?type=table&hostid=' + app.globalData.unionid,
-      success: function (res) {
-        var table
-        for (table in res.data) {
-          wx.request({
-            url: larp.backendurl + '/' + res.data[table]._id,
-            data: { signature: md5.hexMD5(res.data[table]._id + "xiaomaomi") },
-            method: 'DELETE'
-          })
-          wx.request({
-            url: larp.backendurl + '?type=user&tableid=' + res.data[table].tableid,
-            success: function (res) {
-              var player
-              wx.request({
-                url: larp.backendurl + '/' + res.data[player]._id,
-                data: { signature: md5.hexMD5(res.data[player]._id + "xiaomaomi") },
-                method: 'DELETE'
-              })
-            }
-          })
+    if (this.data.createdgame && this.data.createdgame == this.data.gameinfo.id) {
+      wx.navigateTo({
+        url: '../create/create?tableid=' + this.data.createdtable
+      })
+    }else if (this.data.createdgame){
+      wx.showModal({
+        title: '已创建房间',
+        content: '请先进入并删除已创建房间。',
+        cancelText: '取消',
+        confirmText: '进入',
+        success: function(res) {
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '../create/create?tableid=' + that.data.createdtable
+            })
+          } else if (res.cancel) {
+          }
+        },
+      })
+    }else{
+      wx.request({
+        url: larp.backendurl + '?type=table&hostid=' + app.globalData.unionid,
+        success: function (res) {
+          var table
+          for (table in res.data) {
+            wx.request({
+              url: larp.backendurl + '/' + res.data[table]._id,
+              data: { signature: md5.hexMD5(res.data[table]._id + "xiaomaomi") },
+              method: 'DELETE'
+            })
+            wx.request({
+              url: larp.backendurl + '?type=user&tableid=' + res.data[table].tableid,
+              success: function (res) {
+                var player
+                wx.request({
+                  url: larp.backendurl + '/' + res.data[player]._id,
+                  data: { signature: md5.hexMD5(res.data[player]._id + "xiaomaomi") },
+                  method: 'DELETE'
+                })
+              }
+            })
+          }
         }
-      }
-    })
-    wx.request({
-      url: larp.backendurl + '?type=user&usernickname=' + app.globalData.unionid,
-      success: function (res) {
-        var user
-        for (user in res.data) {
-          wx.request({
-            url: larp.backendurl + '/' + res.data[user]._id,
-            data: { signature: md5.hexMD5(res.data[user]._id + "xiaomaomi") },
-            method: 'DELETE',
-            success: function (res) {
-            }
-          })
+      })
+      wx.request({
+        url: larp.backendurl + '?type=user&usernickname=' + app.globalData.unionid,
+        success: function (res) {
+          var user
+          for (user in res.data) {
+            wx.request({
+              url: larp.backendurl + '/' + res.data[user]._id,
+              data: { signature: md5.hexMD5(res.data[user]._id + "xiaomaomi") },
+              method: 'DELETE',
+              success: function (res) {
+              }
+            })
+          }
         }
-      }
-    })
+      })
     wx.navigateTo({
       url: '../create/create?gameid=' + this.data.gameinfo.id
-    })
+      })
+    }
     wx.hideToast()
-
   },
   onLoad: function (options) {
     let that = this
+    this.setData({
+      createdgame: wx.getStorageSync('createdgame'),
+      createdtable: wx.getStorageSync('createdtable')
+    })
     wx.showToast({
       title: '加载中',
       icon: "loading"
@@ -128,8 +152,4 @@ Page({
       })
     }
   },
-
-  onShow: function (e) {
-
-  }
 })

@@ -42,11 +42,13 @@
           </block>
         </view>
         <br/>
+        <br/>
+        <br/>
       </scroll-view>
       <view style="position: fixed; bottom: 0; left: 0; display: flex; flex-direction: row; width: 100%;">
       
-        <button wx:if='{{gameinfo.price && !purchesed}}' type="warn" bindtap='unlock' style='width: 100%; height: 100rpx; font-size: 40rpx;'>解锁游戏</button>
-        <button wx:if='{{!gameinfo.price || purchesed}}' type="primary" bindtap='create' style='width: 100%; height: 100rpx; font-size: 40rpx;'>创建游戏</button>
+        <button wx:if='{{gameinfo.price && !purchesed}}' type="warn" bindtap='unlock' style='border-radius: 0;text-align: center;width: 100%;'>解锁游戏</button>
+        <button wx:if='{{!gameinfo.price || purchesed}}' type="primary" bindtap='create' style='border-radius: 0;text-align: center;width: 100%;'>{{createdgame==gameinfo.id?'已创建游戏':'创建游戏'}}</button>
       </view>
     </view>
 

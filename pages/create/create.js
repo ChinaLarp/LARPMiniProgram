@@ -24,6 +24,8 @@ Page({
       title: '正在删除房间',
       icon: "loading"
     })
+    wx.removeStorageSync('createdtable')
+    wx.removeStorageSync('createdgame')
     var that=this
     var user
     wx.request({
@@ -44,6 +46,10 @@ Page({
             wx.hideToast()
           }
         })
+        }else{
+          wx.reLaunch({
+            url: '../shop/shop'
+          })
         }
       }
     })
@@ -135,6 +141,14 @@ Page({
           },
           method: "POST",
           success: function (res) {
+            wx.setStorage({
+              key: "createdgame",
+              data: options.gameid
+            });
+            wx.setStorage({
+              key: "createdtable",
+              data: tableid
+            });
             wx.hideToast()
           },
         });
@@ -174,46 +188,4 @@ Page({
       }
     }
   },
-  onUnload: function(){
-    wx.showToast({
-      title: '正在删除房间',
-      icon: "loading"
-    })
-    var that = this
-    var user
-    wx.request({
-      url: larp.backendurl + '?type=table&tableid=' + that.data.tableid,
-      success: function (res) {
-        if (res.data.length != 0) {
-          wx.request({
-            url: larp.backendurl + '/' + res.data[0]._id,
-            method: 'DELETE',
-            data: {
-              signature: md5.hexMD5(res.data[0]._id + "xiaomaomi")
-            },
-            complete: function () {
-              wx.hideToast()
-            }
-          })
-        }
-      }
-    })
-    wx.request({
-      url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
-      success: function (res) {
-        console.log(res.data)
-        for (user in res.data) {
-          wx.request({
-            url: larp.backendurl + '/' + res.data[user]._id,
-            data: {
-              signature: md5.hexMD5(res.data[user]._id + "xiaomaomi")
-            },
-            method: 'DELETE',
-            success: function () {
-            },
-          })
-        }
-      },
-    })
-  }
 })
