@@ -166,7 +166,7 @@
         <view >（搜证时尽量避开公众视线）</view>
         <view >
           <image wx:if="{{gameinfo.mapurl}}" src="https://chinabackend.bestlarp.com/pic/{{gameinfo.mapurl}}" bindtap="enlarge" id="-2" mode="widthFix" style="width: 98%; padding-top: 40rpx; padding-bottom: 40rpx"></image>
-          <view wx:if="{{!gameinfo.mapurl}}">此剧本无地图</view>
+          <view wx:if="{{!gameinfo.mapurl}}">（此剧本无地图）</view>
           <view style="display: flex; flex-direction: row; flex-wrap: wrap;">
             <block wx:for="{{gameinfo.cluelocation}}" wx:for-item="location" wx:for-index="index">
               <button wx:if="{{location.index!=characterinfo.banlocation}}" class="squareB" style="width: 40%;" bindtap='getclue' id='{{location.index}}'>{{location.name}}</button>

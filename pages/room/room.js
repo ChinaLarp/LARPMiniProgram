@@ -5,10 +5,10 @@ var larp = require('../../utils/util.js')
 var md5 = require('../../utils/md5.js');
 Page({
   data: {
-    updatetab: [false, false, false, false, false, false],
+    /*updatetab: [false, false, false, false, false, false],
     tutorial: ["https://chinabackend.bestlarp.com/pic/tutorial0.png",
       "https://chinabackend.bestlarp.com/pic/tutorial1.png", "https://chinabackend.bestlarp.com/pic/tutorial2.png", "https://chinabackend.bestlarp.com/pic/tutorial3.png", "https://chinabackend.bestlarp.com/pic/tutorial4.png", "https://chinabackend.bestlarp.com/pic/tutorial5.png"],
-    currenttutorial: -1,
+    currenttutorial: -1,*/
     animationData: {},
     user_id: '',
     tableid: '',
@@ -156,7 +156,7 @@ Page({
       })
     }
   },
-  //swiper
+  /*
   nexttutorial: function (e) {
     //console.log(e);
     var newtab = this.data.updatetab
@@ -167,7 +167,7 @@ Page({
       updatetab: newtab
     })
     //console.log(this.data.currentTab)
-  },
+  },*/
   swiperH: function (e) {
     //console.log(e);
     var newtab=this.data.updatetab
@@ -277,7 +277,7 @@ Page({
     var tempuser_id
     if (this.data.characterid==this.data.picksend){
       wx.showToast({ title: '不能发给自己', icon: 'loading', duration: 1000 });
-    } else if (this.data.data.acquiredclue[this.data.currentclue].cluenumber == -1){
+    } else if (this.data.acquiredclue[this.data.currentclue].cluenumber == -1){
       wx.showToast({ title: '此线索已被发出', icon: 'loading', duration: 1000 });
     } else {
     //animation
@@ -296,9 +296,10 @@ Page({
       wx.request({
         url: larp.backendurl + '?type=user&tableid=' + that.data.tableid + '&characterid=' + that.data.picksend,
         success: function (res) {
-          if (res.data.length!=0){
+          if (res.data.length==0){
             wx.showToast({
               title: '角色不存在',
+              image:"/images/warn.png" ,
               duration: 2000
             })
           }else{
