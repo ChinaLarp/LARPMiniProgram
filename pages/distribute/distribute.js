@@ -113,9 +113,7 @@ Page({
     }
 
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
+
   onLoad: function (options) {
     let that = this
     wx.hideShareMenu({})
@@ -125,10 +123,10 @@ Page({
     })
     if(options.type=='table'){
       this.setData({
-        displaytype: options.type
+        displaytype: 'table'
       })
       wx.request({
-        url: larp.backendurl + '?type=character&gameid=' + options.gameid,
+        url: larp.backendurl + '?type=character&select=charactername&select=charactersex&select=characterdescription&gameid=' + options.gameid,
         success: function (res) {
           that.setData({
             characterlist: res.data,
@@ -137,11 +135,10 @@ Page({
         }
       })
       wx.request({
-        url: larp.backendurl + '?type=game&id=' + options.gameid,
+        url: larp.backendurl + '?type=game&select=name&select=descripion&id=' + options.gameid,
         success: function (res) {
           that.setData({
-            gameinfo: res.data[0],
-            gamename:res.data[0].name
+            gameinfo: res.data[0]
           })
           wx.hideToast()
         }
@@ -155,25 +152,24 @@ Page({
         tableid: options.tableid
       })
       wx.request({
-        url: larp.backendurl + '?type=character&gameid=' + options.gameid,
+        url: larp.backendurl + '?type=character&select=charactername&select=charactersex&select=characterdescription&gameid=' + options.gameid,
         success: function (res) {
           that.setData({
-            characterlist: res.data
+            characterlist: res.data,
+            gameid: options.gameid
           })
         }
       })
       console.log(options.gameid)
       wx.request({
-        url: larp.backendurl + '?type=game&id=' + options.gameid,
+        url: larp.backendurl + '?type=game&select=name&select=descripion&id=' + options.gameid,
         success: function (res) {
           that.setData({
-            gameinfo: res.data[0],
-            gamename: res.data[0].name,
-            gameid: options.gameid
+            gameinfo: res.data[0]
           })
         }
       })
-      console.log(options.tableid)
+      //console.log(options.tableid)
       wx.request({
         url: larp.backendurl + '?type=table&tableid=' + options.tableid,
         success: function (res) {
@@ -189,13 +185,11 @@ Page({
           wx.hideToast()
         }
       })
-
-
     }else{
       this.setData({
         displaytype: options.type
       })
-      console.log(options.id)
+      //console.log(options.id)
       wx.request({
         url: larp.backendurl + '?type=character&gameid=' + options.gameid + '&characterid=' + options.id,
         success: function (res) {
@@ -235,8 +229,6 @@ Page({
           wx.hideToast()
         }
       })
-
-
     }
     }
 })

@@ -82,7 +82,7 @@ Page({
     if(options.tableid){
       console.log("enter created room")
       wx.request({
-        url: larp.backendurl + '?type=table&tableid=' + options.tableid,
+        url: larp.backendurl + '?type=table&select=gamename&select=tableid&select=gameid&tableid=' + options.tableid,
         success: function (res) {
           console.log(res.data)
           if(res.data.length!=0){
@@ -108,9 +108,9 @@ Page({
       this.setData({
         gameid: options.gameid,
       })
-      var tableid=makerd()
+      var tableid = makerd()
       wx.request({
-        url: larp.backendurl + '?type=game&id=' + options.gameid,
+        url: larp.backendurl + '?type=game&select=name&select=cluestatus&id=' + options.gameid,
         success: function (res) {
           that.setData({
             gamename: res.data[0].name,
@@ -126,7 +126,7 @@ Page({
           }
         })
         wx.request({
-          url: larp.backendurl + '/',
+          url: larp.backendurl,
           data: {
             type: "table",
             hostid: app.globalData.unionid,

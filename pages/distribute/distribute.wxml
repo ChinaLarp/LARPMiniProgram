@@ -19,11 +19,11 @@
   </view>
   <view wx:if="{{displaytype!='character'}}" class="page__bd">
     <view class="weui-article">
-      <view class="weui-article__h1">{{gamename}}</view>
+      <view class="weui-article__h1">{{gameinfo.name}}</view>
         <view wx:if="{{displaytype=='host'}}" class="weui-article__h1">
           你是主持人:主持人不参与游戏，但可以以第三视角控制游戏流程。
         </view> 
-        <button wx:if="{{displaytype=='host'}}" type="primary" bindtap="enterroom">主持人入口</button>
+        <button wx:if="{{displaytype=='host'}}" hidden="{{table_id==undefined}}" type="primary" bindtap="enterroom">主持人入口</button>
       <view class="weui-article__section">
         <view class="weui-article__h3">
         </view>

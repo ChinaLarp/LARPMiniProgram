@@ -3,7 +3,6 @@ var md5 = require('../../utils/md5.js')
 const app = getApp()
 Page({
   data: {
-    background: ['green', 'red', 'yellow'],
     gameinfo: null,
     characterlist: null,
     purchased:null
@@ -105,10 +104,7 @@ Page({
   },
   onLoad: function (options) {
     let that = this
-    this.setData({
-      createdgame: wx.getStorageSync('createdgame'),
-      createdtable: wx.getStorageSync('createdtable')
-    })
+
     wx.showToast({
       title: '加载中',
       icon: "loading"
@@ -152,4 +148,10 @@ Page({
       })
     }
   },
+  onShow: function(){
+    this.setData({
+      createdgame: wx.getStorageSync('createdgame'),
+      createdtable: wx.getStorageSync('createdtable')
+    })
+  }
 })
