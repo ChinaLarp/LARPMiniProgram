@@ -388,9 +388,10 @@ Page({
     wx.request({
       url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
       success: function (res) {
-        try{
+        if (that.data.gameinfo.mainplot.length > that.data.roundnumber){
           var plotname = '确认进入下一回合：“' + that.data.gameinfo.mainplot[that.data.roundnumber + 1].plotname + '” 吗?'
-        }catch(e){
+          end=false
+        }else {
           //console.log(e)
           var plotname = "游戏结束，确定退出游戏吗?"
           var end = true
