@@ -82,13 +82,6 @@ App({
         })
       }
     })
-
-    // 获取用户信息
-    wx.getSystemInfo({
-      success: res => {
-        console.log(res)
-      }
-    })
   },
   globalData: {
     userInfo: null

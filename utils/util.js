@@ -22,11 +22,20 @@ var socketsend=function(that,message){
     data: senddata,
   })
 }
+var socketsendData = function (that, message, content) {
+  var senddata = JSON.stringify({
+    table_id: that.data.table_id, tableid: that.data.tableid, characterid: that.data.characterid, message: message, content: content
+  })
+  console.log(senddata)
+  wx.sendSocketMessage({
+    data: senddata,
+  })
+}
 var socketping = function (that, message) {
   var senddata = JSON.stringify({
     message: "ping"
   })
-  console.log(senddata)
+  //console.log(senddata)
   wx.sendSocketMessage({
     data: senddata,
   })
@@ -73,7 +82,7 @@ var socketwork = function (res) {
   if (recieved.table_id == that.data.table_id) {
 
     if (recieved.message == "refresh" || recieved.message == "join") {
-      wx.showToast({ title: '信息更新', icon: 'loading', duration: 1000 });
+      //wx.showToast({ title: '信息更新', icon: 'loading', duration: 200 });
       var content = ''
       var cast
       wx.request({
@@ -139,6 +148,7 @@ var tableuserinfo = function(that){
 module.exports = {
   formatTime: formatTime,
   socketsend: socketsend,
+  socketsendData: socketsendData,
   socketping: socketping,
   databackup: databackup,
   backendurl: backendurl,

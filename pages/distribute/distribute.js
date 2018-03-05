@@ -104,6 +104,8 @@ Page({
                   url: '../room/room',
                 })
               } else {
+                console.log(res.data[0])
+                console.log(app.globalData.unionid)
                 wx.showToast({ title: '请确认你的角色', duration: 1000 })
               }
             }

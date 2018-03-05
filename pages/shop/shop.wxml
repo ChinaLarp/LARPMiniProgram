@@ -86,5 +86,5 @@
   
 <view class="article" style="font-size:35rpx;font-weight: 400">更新（2/22/2018）：</view>
 <view class="article" style="font-size:35rpx">界面优化</view>
-<view class="article" style="font-size:35rpx">安卓6.0一下版本的兼容</view>
+<view class="article" style="font-size:35rpx">解决进入下回合会删除房间的bug</view>
 </scroll-view>

@@ -203,7 +203,7 @@
           <block>
             <view class="square">
               <form bindsubmit="broadcastSubmit">
-                <input class="notepad" maxlength="100" bindblur="bindTextAreaBlur" style="height: 40rpx;" placeholder="“公告秘密”将此处内容广播（所有玩家可见）" value="{{broadcast}}" name="textarea" />
+                <input class="notepad" maxlength="100" bindblur="bindTextAreaBlur" style="height: 40rpx;" placeholder="“公告秘密”将此处内容广播（所有玩家可见）" name="textarea" />
                 <button class="squareB" style="width: 100%;" form-type="submit"> 公告秘密 </button>
               </form>
             </view>
@@ -221,7 +221,7 @@
                 <slider value="3" activeColor="orange" min="0" max="10" show-value name="point" />
                 <button class="squareB" form-type="submit"> 发放行动点 </button>
               </form>
-              <button class="squareB" bindtap='nextround' hidden='{{hostname!=usernickname && characterid!=-1}}'>进入下一回合</button>
+              <button class="squareB" bindtap='nextround' hidden='{{hostname!=usernickname && characterid!=-1}}'>{{gameinfo.mainplot.length >roundnumber+1?"进入下一回合":"删除房间"}}</button>
               <block wx:if="{{vote==-1&&characterid!=-1&&gameinfo.mainplot[roundnumber].enablevote>0}}">
                 <view style="display: flex; flex-direction: row; width: 100%; align-items: center; justify-content: space-around">
                   <picker bindchange="pickvote" range="{{gameinfo.characterlist}}" range-key="name" style="width: 50%">
