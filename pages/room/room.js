@@ -257,9 +257,19 @@ Page({
     var tempacquiredclue =[]
     var tempuser_id
     if (this.data.characterid==this.data.picksend){
-      wx.showToast({ title: '不能发给自己', icon: 'loading', duration: 1000 });
+      wx.showModal({
+        title: '发送失败',
+        content: '线索不能发给自己。',
+        showCancel:false
+      })
+      //wx.showToast({ title: '不能发给自己', icon: 'loading', duration: 1000 });
     } else if (this.data.acquiredclue[this.data.currentclue].cluenumber == -1){
-      wx.showToast({ title: '此线索已被发出', icon: 'loading', duration: 1000 });
+      wx.showModal({
+        title: '发送失败',
+        content: '此线索已经被发送过。',
+        showCancel: false
+      })
+      //wx.showToast({ title: '此线索已被发出', icon: 'loading', duration: 1000 });
     } else {
     //animation
     var animation = wx.createAnimation({
@@ -398,6 +408,8 @@ Page({
                   signature: md5.hexMD5(that.data.table_id + "xiaomaomi")
                 },
                 complete: function () {
+                  wx.removeStorageSync('createdtable')
+                  wx.removeStorageSync('createdgame')
                   console.log('deleted')
                   wx.reLaunch({
                     url: '../shop/shop'
@@ -929,15 +941,14 @@ Page({
               })
             }
           } else if (recieved.message == "revote") {
+            wx.showModal({
+              title: '重新投票',
+              content: '请重新投票',
+              showCancel:false
+            })
             wx.showToast({ title: '重新投票', icon: 'loading', duration: 1000 });
-            wx.request({
-              url: larp.backendurl + '/' + that.data.user_id,
-              success: function (res) {
-                console.log(res.data)
-                that.setData({
-                  vote: res.data.vote
-                })
-              },
+            that.setData({
+              vote: -1
             })
           }
         }

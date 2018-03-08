@@ -12,6 +12,17 @@
 	"appid": "wxf0487d45228f02d3",
 	"projectname": "LARP",
 	"condition": {
+		"weapp": {
+			"current": -1,
+			"list": [
+				{
+					"id": 0,
+					"name": "distribut",
+					"pathName": "pages/distribute/distribute",
+					"query": "id=3&tableid=oLjuQxTMeo&gameid=wanshengjiezhiye&type=character"
+				}
+			]
+		},
 		"search": {
 			"current": -1,
 			"list": []
