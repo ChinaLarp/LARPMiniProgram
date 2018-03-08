@@ -13,6 +13,7 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 var backendurl ='https://chinabackend.bestlarp.com/api/app'
+var backendbaseurl = 'https://chinabackend.bestlarp.com'
 var socketsend=function(that,message){
   var senddata = JSON.stringify({
     table_id: that.data.table_id, message: message
@@ -152,6 +153,7 @@ module.exports = {
   socketping: socketping,
   databackup: databackup,
   backendurl: backendurl,
+  backendbaseurl: backendbaseurl,
   cleardata: cleardata,
   socketwork: socketwork,
   tableuserinfo:tableuserinfo

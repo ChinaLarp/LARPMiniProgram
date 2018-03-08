@@ -545,7 +545,6 @@ Page({
         })
       }
     } else if (that.data.gameinfo.cluemethod == "order") {
-
     } else if (that.data.gameinfo.cluemethod == "random") {
       if (that.data.actionpoint > 0) {
         wx.showToast({
@@ -556,58 +555,26 @@ Page({
           actionpoint: that.data.actionpoint - 1
         })
         wx.request({
-          url: larp.backendurl + '/' + that.data.table_id,
-          success: function (res) {
-            that.setData({
-              cluestatus: res.data.cluestatus
-            })
+          url: larp.backendbaseurl + '/clue',
+          data:{
+            table_id: that.data.table_id,
+            locationid:locationid
           },
-          complete: function () {
-            var remaining = that.data.cluestatus[locationid].filter(v => v).length
-            var clueid
-            var cluenumber = Math.floor(Math.random() * remaining)
-            if (remaining > 0) {
-              console.log(cluenumber)
-              for (clueid in that.data.cluestatus[locationid]) {
-                if (that.data.cluestatus[locationid][clueid] == true) {
-                  if (clueid == cluenumber) {
-                    break;
-                  }
-                } else {
-                  cluenumber = cluenumber + 1
-                  console.log(cluenumber)
-                }
-              }
-              wx.hideToast()
+          method: "POST",
+          success: function (res) {
+            console.log(locationid)
+            console.log(res.data.clueid)
+            wx.hideLoading()
+            if (res.data.clueid>=0){
               wx.showModal({
                 title: '线索',
-                content: that.data.gameinfo.cluelocation[locationid].clues[cluenumber].content + '    你的剩余行动点：' + that.data.actionpoint,
-          showCancel: false
+                content: that.data.gameinfo.cluelocation[locationid].clues[res.data.clueid].content + '    你的剩余行动点：' + that.data.actionpoint,
+                showCancel: false
               })
-              var newcluestatus = that.data.cluestatus
-              newcluestatus[locationid][cluenumber] = false
               that.setData({
-                cluestatus: newcluestatus
+                acquiredclue: that.data.acquiredclue.concat(that.data.gameinfo.cluelocation[locationid].clues[res.data.clueid])
               })
-              console.log("new clue status")
-              console.log(that.data.cluestatus)
-              that.setData({
-                acquiredclue: that.data.acquiredclue.concat(that.data.gameinfo.cluelocation[locationid].clues[cluenumber])
-              })
-
-              wx.request({
-                url: larp.backendurl + '/' + that.data.table_id,
-                data: {
-                  cluestatus: that.data.cluestatus,
-                  signature: md5.hexMD5(that.data.table_id + "xiaomaomi")
-                },
-                method: "PUT",
-                success: function () {
-                  console.log("succeeded")
-                },
-              });
-            } else {
-              wx.hideToast()
+            }else{
               wx.showModal({
                 title: '线索',
                 content: '你毫无所获。你的剩余行动点：' + that.data.actionpoint,
@@ -626,11 +593,8 @@ Page({
                 console.log("succeeded")
               },
             });
-
-          }
-        });
-
-
+          },
+        })
       } else {
         wx.showModal({
           title: '线索',
