@@ -222,6 +222,7 @@
                 <button class="squareB" form-type="submit"> 发放行动点 </button>
               </form>
               <button class="squareB" bindtap='nextround' hidden='{{hostname!=usernickname && characterid!=-1}}'>{{gameinfo.mainplot.length >roundnumber+1?"进入下一回合":"删除房间"}}</button>
+              <button class="squareB" bindtap='exitroom' wx:if='{{hostname!=usernickname && characterid!=-1 && gameinfo.mainplot.length == roundnumber+1}}'>退出房间</button>
               <block wx:if="{{vote==-1&&characterid!=-1&&gameinfo.mainplot[roundnumber].enablevote>0}}">
                 <view style="display: flex; flex-direction: row; width: 100%; align-items: center; justify-content: space-around">
                   <picker bindchange="pickvote" range="{{gameinfo.characterlist}}" range-key="name" style="width: 50%">

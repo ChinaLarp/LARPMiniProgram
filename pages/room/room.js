@@ -151,6 +151,9 @@ Page({
         }
       })
     }
+    wx.connectSocket({
+      url: 'wss://chinabackend.bestlarp.com',
+    })
   },
   swiperH: function (e) {
     //console.log(e);
@@ -411,6 +414,8 @@ Page({
                   wx.removeStorageSync('createdtable')
                   wx.removeStorageSync('createdgame')
                   console.log('deleted')
+                  wx.closeSocket({
+                  })
                   wx.reLaunch({
                     url: '../shop/shop'
                   })
@@ -635,24 +640,12 @@ Page({
       }
     });
   },
-  /*
-  save: function (e) {
-    let that = this
-    console.log(this.data.user_id)
-    wx.request({
-      url: larp.backendurl + '/' + that.data.user_id,
-      data: {
-        acquiredclue: that.data.acquiredclue,
-        broadcast: that.data.broadcast,
-        vote: that.data.vote,
-        actionpoint: that.data.actionpoint
-      },
-      method: "PUT",
-      success: function (res) {
-        console.log("succeeded")
-      },
-    });
+  exitroom: function (e) {
+    wx.reLaunch({
+      url: '../shop/shop'
+    })
   },
+  /*
   clearinfo: function (e) {
     larp.cleardata()
   },*/
@@ -869,7 +862,7 @@ Page({
               },
             })
           }else if (recieved.message == "broadcast") {
-            wx.showToast({ title: '信息更新', icon: 'loading', duration: 500 });
+            wx.showToast({ title: '公告板更新', icon: 'loading', duration: 500 });
             console.log("I get that")
             wx.request({
               url: larp.backendurl + '?type=user&select=characterid&select=broadcast&tableid=' + that.data.tableid,
@@ -910,7 +903,7 @@ Page({
               content: '请重新投票',
               showCancel:false
             })
-            wx.showToast({ title: '重新投票', icon: 'loading', duration: 1000 });
+            //wx.showToast({ title: '重新投票', icon: 'loading', duration: 1000 });
             that.setData({
               vote: -1
             })
