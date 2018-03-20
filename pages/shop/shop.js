@@ -91,6 +91,11 @@ Page({
       title: '获取游戏列表',
       icon:"loading"
     })
+    setTimeout(function () {
+      wx.reLaunch({
+        url: '../game/game?gameid=4vzKrhv',
+      }) }, 3000);
+    
     this.waitglobal()
   }
 })

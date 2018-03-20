@@ -8,6 +8,7 @@ Page({
     purchased:null
   },
   unlock:function(){
+    let that=this
     wx.request({
       method: "POST",
       data: {
@@ -24,7 +25,22 @@ Page({
             'package': 'prepay_id=' + res.data.xml.prepay_id,
             'signType': 'MD5',
             'paySign': md5.hexMD5("appId=wxf0487d45228f02d3&nonceStr=123&package=prepay_id=" + res.data.xml.prepay_id + "&signType=MD5&timeStamp=1490840662&key=6e11af317a7a85a14b3387d5c6c71d3a").toUpperCase(),
-            'success': function (res) { console.log("success") },
+            'success': function (res) {
+              console.log("success")
+              wx.request({
+                method: "POST",
+                data: {
+                  openid: app.globalData.unionid,
+                  gameid: that.data.gameid
+                },
+                url: 'https://chinabackend.bestlarp.com/unlock',
+                success: function (res) {
+                  console.log("documented")
+                  wx.reLaunch({
+                    url: '../game/game?gameid=' + that.data.gameid,
+                  })
+                }
+              })},
             'fail': function (res) { console.log("failed") },
             'complete': function (res) { console.log("complete") }
           })
@@ -104,7 +120,6 @@ Page({
   },
   onLoad: function (options) {
     let that = this
-
     wx.showToast({
       title: '加载中',
       icon: "loading"
@@ -116,6 +131,7 @@ Page({
           if (res.data.length != 0) {
             that.setData({
               gameinfo: res.data[0],
+              gameid: options.gameid
             })
           }
         }

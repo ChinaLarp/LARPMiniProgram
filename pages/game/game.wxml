@@ -17,20 +17,19 @@
             <view class="article" style="font-weight: 400">难度指数：</view>
             <view class="article">暂无评分</view>
             <view class="article" style="font-weight: 400">游戏价格：</view>
-            <view class="article">{{gameinfo.price?gameinfo.price:"免费体验"}}</view>
-            <view class="article" style="font-weight: 400">游戏介绍：</view>
-            <view class="article">
-            <block wx:for="{{gameinfo.detailDescription}}" wx:for-item="item">
-              <view>
-                {{item}}
-              </view>
-            </block>
-            </view>
+            <view class="article">{{gameinfo.price?(gameinfo.price/100):"免费体验"}}</view>
+            
           </scroll-view>
         </view>
         
         <!--人物信息-->
         <view class="weui-article__section" style='padding-bottom: 40rpx; padding-right: 50rpx'>
+          <view class="head" style="font-weight: 600">游戏介绍</view>
+          <block wx:for="{{gameinfo.detailDescription}}" wx:for-item="item">
+              <view class="article" style="font-weight: 300">
+                {{item}}
+              </view>
+          </block>
           <view class="head" style="font-weight: 600">人物介绍</view>
           <block wx:for="{{characterlist}}" wx:for-item="item">
               <view class="article" style="font-weight: 400">
@@ -47,8 +46,8 @@
       </scroll-view>
       <view style="position: fixed; bottom: 0; left: 0; display: flex; flex-direction: row; width: 100%;">
       
-        <button wx:if='{{gameinfo.price && !purchesed}}' type="warn" bindtap='unlock' style='border-radius: 0;text-align: center;width: 100%;'>解锁游戏</button>
-        <button wx:if='{{!gameinfo.price || purchesed}}' type="primary" bindtap='create' style='border-radius: 0;text-align: center;width: 100%;'>{{createdgame==gameinfo.id?'已创建游戏':'创建游戏'}}</button>
+        <button wx:if='{{gameinfo.price && !purchased}}' type="warn" bindtap='unlock' style='border-radius: 0;text-align: center;width: 100%;'>解锁游戏</button>
+        <button wx:if='{{!gameinfo.price || purchased}}' type="primary" bindtap='create' style='border-radius: 0;text-align: center;width: 100%;'>{{createdgame==gameinfo.id?'已创建游戏':'创建游戏'}}</button>
       </view>
     </view>
 
