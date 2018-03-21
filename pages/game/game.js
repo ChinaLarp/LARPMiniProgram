@@ -30,10 +30,13 @@ Page({
               wx.request({
                 method: "POST",
                 data: {
+                  type:"purchase",
                   openid: app.globalData.unionid,
-                  gameid: that.data.gameid
+                  gameid: that.data.gameid,
+                  price: that.data.gameinfo.price,
+                  signature: md5.hexMD5("xiaomaomi")
                 },
-                url: 'https://chinabackend.bestlarp.com/unlock',
+                url: 'https://chinabackend.bestlarp.com/api/app',
                 success: function (res) {
                   console.log("documented")
                   wx.reLaunch({
@@ -148,12 +151,12 @@ Page({
         }
       })
       wx.request({
-        url: 'https://chinabackend.bestlarp.com/api/app?type=openid&select=purchase&id=' + app.globalData.unionid ,
+        url: 'https://chinabackend.bestlarp.com/api/app?type=openid&select=purchasehistory%20purchase&id=' + app.globalData.unionid+'&populate=purchasehistory' ,
         success: function (res) {
           if (res.data.length != 0) {
-            console.log(res.data[0].purchase.indexOf(options.gameid) > -1)
+            console.log(res.data[0].purchasehistory.map(function(purchase){return purchase.gameid}).indexOf(options.gameid))
             that.setData({
-              purchased: (res.data[0].purchase.indexOf(options.gameid)>-1),
+              purchased: (res.data[0].purchasehistory.map(function (purchase) { return purchase.gameid }).indexOf(options.gameid)>-1),
             })
           }
         }
