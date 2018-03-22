@@ -31,7 +31,7 @@ Page({
                 method: "POST",
                 data: {
                   type:"purchase",
-                  openid: app.globalData.unionid,
+                  id: app.globalData.unionid,
                   gameid: that.data.gameid,
                   price: that.data.gameinfo.price,
                   signature: md5.hexMD5("xiaomaomi")

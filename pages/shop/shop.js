@@ -11,6 +11,13 @@ Page({
       url: '../game/game?gameid=' + this.data.gamelist[e.currentTarget.id].id
     })
   },
+
+  preview: function (e) {
+    wx.previewImage({
+      urls: ['https://chinabackend.bestlarp.com/pic/background.png'],
+    })
+  },
+  
   gamelist: function (e) {
     this.setData({
       display: 0
@@ -61,9 +68,9 @@ Page({
             });
             wx.showModal({
               title: '已创建房间',
-              content: '您有已创建的房间，是否直接进入？',
+              content: '您有已创建的房间，是否直接进入创建页面？',
               confirmText: '进入',
-              cancelText: '取消',
+              cancelText: '暂不进入',
               success: function (res) {
                 console.log(res)
                 if (res.confirm) {

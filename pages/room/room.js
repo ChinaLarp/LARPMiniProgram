@@ -81,6 +81,12 @@ Page({
       });
     }
   },
+  preview: function (e) {
+    //console.log(e.target.id)
+    wx.previewImage({
+      urls: [e.target.id],
+    })
+  },
   refresh: function (e) {
     let that = this
     if (that.data.table_id) {
@@ -166,93 +172,6 @@ Page({
     this.setData({
       currentclue: e.detail.current,
     })
-  },
-
-
-  touchstartCallback: function (e) {
-    let that=this
-    //触摸开始
-    that.data.touchtime = e.timeStamp;
-    console.log('touchstartCallback');
-    console.log(e);
-    //图片缩放
-    if (e.touches.length === 1) {
-      let { clientX, clientY } = e.touches[0];
-      this.startX = clientX;
-      this.startY = clientY;
-      this.touchStartEvent = e.touches;
-    } else {
-      let xMove = e.touches[1].clientX - e.touches[0].clientX;
-      let yMove = e.touches[1].clientY - e.touches[0].clientY;
-      let distance = Math.sqrt(xMove * xMove + yMove * yMove);
-      this.setData({
-        'stv.distance': distance,
-        'stv.zoom': true, //缩放状态
-      })
-    }
-
-  },
-  touchmoveCallback: function (e) {
-    //触摸移动中
-    //console.log('touchmoveCallback');
-    //console.log(e);
-
-    if (e.touches.length === 1) {
-      //单指移动
-      if (this.data.stv.zoom) {
-        //缩放状态，不处理单指
-        return;
-      }
-      let { clientX, clientY } = e.touches[0];
-      let offsetX = clientX - this.startX;
-      let offsetY = clientY - this.startY;
-      this.startX = clientX;
-      this.startY = clientY;
-      let { stv } = this.data;
-      stv.offsetX += offsetX;
-      stv.offsetY += offsetY;
-      stv.offsetLeftX = -stv.offsetX;
-      stv.offsetLeftY = -stv.offsetLeftY;
-      this.setData({
-        stv: stv
-      });
-
-    } else {
-      //双指缩放
-      let xMove = e.touches[1].clientX - e.touches[0].clientX;
-      let yMove = e.touches[1].clientY - e.touches[0].clientY;
-      let distance = Math.sqrt(xMove * xMove + yMove * yMove);
-      let distanceDiff = distance - this.data.stv.distance;
-      let newScale = this.data.stv.scale + 0.005 * distanceDiff;
-      this.setData({
-        'stv.distance': distance,
-        'stv.scale': newScale,
-      })
-    }
-  },
-  touchendCallback: function (e) {
-    let that=this
-    //触摸结束
-    console.log('touchendCallback');
-    console.log(e);
-    if (e.touches.length === 0) {
-      this.setData({
-        'stv.zoom': false, //重置缩放状态
-      })
-      if(e.timeStamp - that.data.touchtime < 200){
-        this.setData({
-          seeimage: -1,
-          stv: {
-            offsetX: 0,
-            offsetY: 0,
-            zoom: false, //是否缩放状态
-            distance: 0,  //两指距离
-            scale: 1,  //缩放倍数
-          }
-          
-        })
-      }
-    }
   },
   //sendClueTo
   sendclueto: function () {
@@ -352,11 +271,6 @@ Page({
       picksend: e.detail.value
     })
   },
-  enlarge: function (e) {
-    this.setData({
-      seeimage: e.target.id
-    })
-  },
   //navigator
   navigate: function (e) {
     console.log(e);
@@ -382,16 +296,20 @@ Page({
     wx.request({
       url: larp.backendurl + '?type=user&tableid=' + that.data.tableid,
       success: function (res) {
+        var end
+        var allow = true
         if (that.data.gameinfo.mainplot.length > that.data.roundnumber+1){
           var plotname = '确认进入下一回合：“' + that.data.gameinfo.mainplot[that.data.roundnumber + 1].plotname + '” 吗?'
-          var end = false
+          end = false
         }else {
           //console.log(e)
           var plotname = "确定删除房间吗?请确认已阅读真相。"
-          var end = true
+          end = true
         }
-        if (res.data.length != that.data.gameinfo.playernumber) {
-          plotname = "人数未齐！"+plotname
+        if (res.data.length < that.data.gameinfo.playernumber) {
+          //plotname = "人数未齐！" + plotname
+          plotname = "人数未齐！无法进入下回合，请确认玩家数。"
+          allow = false
         }
         wx.hideToast()
         wx.showModal({
@@ -439,7 +357,7 @@ Page({
                   }
                 },
               })
-            }else if (res.confirm) {
+            }else if (res.confirm && allow) {
               wx.request({
                 url: larp.backendurl + '/' + that.data.table_id,
                 data: {
@@ -611,9 +529,18 @@ Page({
       console.log("unknown method")
     }
   },
-
-  bindTextAreaBlur: function (e) {
-    console.log(e.detail.value)
+  relauch: function(e){
+    wx.showModal({
+      title: '回到首页',
+      content: '首页无法直接回到游戏房间，请通过转发人物码再次进入房间',
+      complete: function (res) {
+        if (res.confirm) {
+          wx.reLaunch({
+            url: '../shop/shop',
+          })
+        }
+      }
+    })
   },
 
   broadcastSubmit: function (e) {
