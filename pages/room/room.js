@@ -303,13 +303,13 @@ Page({
           end = false
         }else {
           //console.log(e)
-          var plotname = "确定删除房间吗?请确认已阅读真相。"
+          var plotname = "确定删除房间吗？请确认已阅读真相。"
           end = true
         }
         if (res.data.length < that.data.gameinfo.playernumber) {
           //plotname = "人数未齐！" + plotname
           plotname = "人数未齐！无法进入下回合，请确认玩家数。"
-          allow = false
+          //allow = false
         }
         wx.hideToast()
         wx.showModal({
