@@ -49,12 +49,14 @@
                   <view class="kind-list-text">{{plot.plotname}}</view>
                 </view>
                 <view class="kind-list-item-bd {{plotopen==index ? 'kind-list-item-bd-show' : ''}}">
-                  <view class="weui-article__h2 tx pdt">*公开信息</view>
-                    <block wx:for="{{plot.content}}" wx:for-item="paragraph" wx:for-index="pindex">
-                      <view>{{paragraph}}</view>
+                    <block wx:if="{{plot.content[0]}}">
+                      <view class="weui-article__h2 tx pdt">公开信息</view>
+                      <block wx:for="{{plot.content}}" wx:for-item="paragraph" wx:for-index="pindex">
+                        <view>{{paragraph}}</view>
+                      </block>
                     </block>
-                    <block wx:if="{{characterinfo.characterplot[0].content[0].content}}">
-                      <view class="weui-article__h2 tx pdt">*个人信息</view>
+                    <block wx:if="{{characterinfo.characterplot[index].content[0]}}">
+                      <view class="weui-article__h2 tx pdt">个人信息</view>
                       <block wx:for="{{characterinfo.characterplot[index].content}}" wx:for-item="charactercontent" wx:for-index="cindex">
                         <view class="weui-article__h3 tx pdt">{{charactercontent.type}}</view>
                         <block wx:for="{{charactercontent.content}}" wx:for-item="characterpara" wx:for-index="cpindex">

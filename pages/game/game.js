@@ -151,12 +151,12 @@ Page({
         }
       })
       wx.request({
-        url: 'https://chinabackend.bestlarp.com/api/app?type=openid&select=purchasehistory%20purchase&id=' + app.globalData.unionid+'&populate=purchasehistory' ,
+        url: 'https://chinabackend.bestlarp.com/api/app?type=purchase&id=' + app.globalData.unionid + '&gameid=' + options.gameid ,
         success: function (res) {
           if (res.data.length != 0) {
-            console.log(res.data[0].purchasehistory.map(function(purchase){return purchase.gameid}).indexOf(options.gameid))
+            //console.log(res.data[0].purchasehistory.map(function(purchase){return purchase.gameid}).indexOf(options.gameid))
             that.setData({
-              purchased: (res.data[0].purchasehistory.map(function (purchase) { return purchase.gameid }).indexOf(options.gameid)>-1),
+              purchased: true,
             })
           }
         }
