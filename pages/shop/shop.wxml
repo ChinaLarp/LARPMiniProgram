@@ -84,8 +84,6 @@
   <view class="article" style="font-size:40rpx;font-weight: 400">微信搜索<text style="color:red">“全民侦探社”</text>关注我们。</view>
   <view class="article" style="font-size:40rpx;font-weight: 400">你的支持将是我们前进的动力！</view>
   
-<view class="article" style="font-size:35rpx;font-weight: 400">更新（3/22/2018）：</view>
-<view class="article" style="font-size:35rpx">添加付费剧本功能</view>
-<view class="article" style="font-size:35rpx">玩家现在可在游戏界面回到首页</view>
-<view class="article" style="font-size:35rpx">优化预览图片线索和地图功能</view>
+<view class="article" style="font-size:35rpx;font-weight: 400">更新（4/9/2018）：</view>
+<view class="article" style="font-size:35rpx">付费剧本购买须知</view>
 </scroll-view>

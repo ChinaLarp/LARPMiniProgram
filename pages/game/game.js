@@ -50,6 +50,13 @@ Page({
       }
     })
   },
+  howto: function(e){
+    wx.showModal({
+      title: '购买须知',
+      content: '点击下方解锁游戏按钮将永久解锁该游戏，可以无限次创建此游戏房间。一局游戏仅创建者一人需要解锁。',
+      showCancel:false,
+    })
+  },
   create: function () {
     let that = this
     wx.showToast({
@@ -159,7 +166,7 @@ Page({
               purchased: true,
             })
           }
-        }
+        } 
       })
     }else{
       wx.reLaunch({

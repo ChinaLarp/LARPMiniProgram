@@ -18,6 +18,7 @@
             <view class="article">暂无评分</view>
             <view class="article" style="font-weight: 400">游戏价格：</view>
             <view class="article">{{gameinfo.price?(gameinfo.price/100):"免费体验"}}</view>
+            <button style="width: 70%; height: 2em; font-size:28rpx;text-align: center; margin: 0" bindtap='howto' wx:if="{{gameinfo.price}}">购买须知</button>
             
           </scroll-view>
         </view>
